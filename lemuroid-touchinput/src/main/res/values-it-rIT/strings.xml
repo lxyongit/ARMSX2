@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">Fatto</string>
+    <string name="touch_customize_button_reset">Reset</string>
+    <string name="touch_customize_info">Trascina e pizzica i controlli per cambiare posizione e dimensione</string>
+
+    <string name="adjust_buttons_reset">Ripristina</string>
+    <string name="adjust_buttons_save">Salva</string>
+    <string name="touch_customize_dpad_style_analog">D-Pad stile stick analogico</string>
+</resources>

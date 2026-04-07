@@ -1,5 +1,7 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 def enableRN = rootProject.ext.has('enableRN') ? rootProject.ext.enableRN : false
@@ -53,15 +55,8 @@ android {
     flavorDimensions "distribution"
 
     defaultConfig {
-    applicationId "come.nanodata.armsx2"
         minSdk 26
         targetSdk 35
-        versionCode 22
-        versionName "1.0.8"
-
-        // APK
-        def baseName = 'ARMSX2'
-        setProperty('archivesBaseName', "${baseName}_${versionCode}_${new Date().format('yyyyMMddHHmm')}${isSwitchBuild ? '-switch' : ''}")
 
         externalNativeBuild {
             cmake {
@@ -102,21 +97,6 @@ android {
         }
     }
 
-    def keystorePropertiesFile = rootProject.file("app/armsx2_keystore.properties")
-    def keystoreProperties = new Properties()
-    if (keystorePropertiesFile.exists()) {
-        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    }
-
-    signingConfigs {
-        release {
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-        }
-    }
-
     buildTypes {
         debug {
             ndk {
@@ -124,7 +104,6 @@ android {
             }
             debuggable true
             minifyEnabled false
-            applicationIdSuffix ".debug"
             buildConfigField "boolean", "LOGS_ENABLED", "true"
         }
         release {
@@ -133,7 +112,6 @@ android {
             }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
             buildConfigField "boolean", "LOGS_ENABLED", "true"
         }
         releaseNoLog {
@@ -164,6 +142,7 @@ android {
     buildFeatures {
         buildConfig true
         prefab true
+        compose true
     }
 
     sourceSets {
@@ -193,12 +172,27 @@ if (enableRN) {
 }
 
 dependencies {
+    implementation project(':lemuroid-touchinput')
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
     implementation 'com.google.android.material:material:1.13.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'com.caverock:androidsvg:1.4'
     implementation 'androidx.browser:browser:1.9.0'
+    implementation "io.github.swordfish90:padkit:1.0.0-beta1"
+    
+    // Compose
+    def composeBom = platform('androidx.compose:compose-bom:2024.02.00')
+    implementation composeBom
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.activity:activity-compose'
+    implementation 'androidx.compose.ui:ui-viewbinding'
+    implementation 'androidx.compose.foundation:foundation'
+    implementation 'androidx.compose.foundation:foundation-layout'
+    implementation 'androidx.compose.runtime:runtime'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose'
+    
     if (enableRN) {
         // React Native core and Hermes engine (brownfield integration)
         implementation 'com.facebook.react:react-android:0.74.3'

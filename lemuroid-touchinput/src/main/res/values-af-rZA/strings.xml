@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="adjust_buttons_reset">Herstel</string>
+    <string name="adjust_buttons_save">Stoor</string>
+    <string name="touch_customize_dpad_style_analog">Analoog stok styl D-Pad</string>
+</resources>

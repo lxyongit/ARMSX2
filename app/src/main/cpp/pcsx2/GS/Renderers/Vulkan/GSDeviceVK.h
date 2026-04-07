@@ -279,7 +279,7 @@ private:
 	u32 m_current_frame = 0;
 
 	bool m_last_submit_failed = false;
-	bool m_last_present_failed = false;
+	[[maybe_unused]] bool m_last_present_failed = false;
 
 	std::map<u32, VkRenderPass> m_render_pass_cache;
 

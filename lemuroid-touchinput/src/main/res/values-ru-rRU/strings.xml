@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">Готово</string>
+    <string name="touch_customize_button_reset">Сброс</string>
+    <string name="touch_customize_info">Настройте положение и размер кнопок при помощи перетаскивания и щипков</string>
+
+    <string name="adjust_buttons_reset">Сбросить</string>
+    <string name="adjust_buttons_save">Сохранить</string>
+    <string name="touch_customize_dpad_style_analog">Крестовина в стиле аналогового стика</string>
+</resources>

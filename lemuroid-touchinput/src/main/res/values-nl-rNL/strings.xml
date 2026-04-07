@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">Gereed</string>
+    <string name="touch_customize_button_reset">Resetten</string>
+    <string name="touch_customize_info">Sleep en Knijp om de positie en grootte te wijzigen</string>
+
+    <string name="adjust_buttons_reset">Resetten</string>
+    <string name="adjust_buttons_save">Opslaan</string>
+    <string name="touch_customize_dpad_style_analog">D-Pad in analoge stick-stijl</string>
+</resources>

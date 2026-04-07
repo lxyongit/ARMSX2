@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">Ολοκληρώθηκε</string>
+    <string name="touch_customize_button_reset">Επαναφορά</string>
+    <string name="touch_customize_info">Σύρετε και κλείστε τα δάκτυλα σας στα εικονικά χειριστήρια για να αλλάξετε θέση και μέγεθος</string>
+
+    <string name="adjust_buttons_reset">Επαναφορά</string>
+    <string name="adjust_buttons_save">Αποθήκευση</string>
+    <string name="touch_customize_dpad_style_analog">D-Pad στυλ αναλογικού μοχλού</string>
+</resources>

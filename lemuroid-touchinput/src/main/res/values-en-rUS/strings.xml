@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="adjust_buttons_reset">Reset</string>
+    <string name="adjust_buttons_save">Save</string>
+    <string name="touch_customize_dpad_style_analog">Analog Stick Style D-Pad</string>
+</resources>

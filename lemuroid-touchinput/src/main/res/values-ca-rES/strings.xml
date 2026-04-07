@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">Fet</string>
+    <string name="touch_customize_button_reset">Reinicia</string>
+
+    <string name="adjust_buttons_reset">Restablir</string>
+    <string name="adjust_buttons_save">Desar</string>
+    <string name="touch_customize_dpad_style_analog">D-Pad estil stick analògic</string>
+</resources>

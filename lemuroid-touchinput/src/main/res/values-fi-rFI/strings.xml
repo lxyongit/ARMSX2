@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">Valmis</string>
+    <string name="touch_customize_button_reset">Reset</string>
+    <string name="touch_customize_info">Vedä ja Pinch ohjaimet muuttaaksesi sijaintia ja kokoa</string>
+
+    <string name="adjust_buttons_reset">Palauta</string>
+    <string name="adjust_buttons_save">Tallenna</string>
+    <string name="touch_customize_dpad_style_analog">Analogisen sauvan tyylinen suuntaohjain</string>
+</resources>

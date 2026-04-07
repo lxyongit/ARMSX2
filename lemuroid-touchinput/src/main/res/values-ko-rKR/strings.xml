@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">완료</string>
+    <string name="touch_customize_button_reset">초기화</string>
+    <string name="touch_customize_info">컨트롤을 드래그하고 확대/축소하여 위치와 크기를 변경합니다</string>
+
+    <string name="adjust_buttons_reset">초기화</string>
+    <string name="adjust_buttons_save">저장</string>
+    <string name="touch_customize_dpad_style_analog">아날로그 스틱 스타일 D-패드</string>
+</resources>

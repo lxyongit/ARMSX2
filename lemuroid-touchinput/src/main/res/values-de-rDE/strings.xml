@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">Erledigt</string>
+    <string name="touch_customize_button_reset">Zurücksetzen</string>
+    <string name="touch_customize_info">Ziehe und kneife die Steuerelemente um Position und Größe zu ändern</string>
+
+    <string name="adjust_buttons_reset">Zurücksetzen</string>
+    <string name="adjust_buttons_save">Speichern</string>
+    <string name="touch_customize_dpad_style_analog">D-Pad im Analog-Stick-Stil</string>
+</resources>
