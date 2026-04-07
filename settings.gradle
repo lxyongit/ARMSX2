@@ -49,6 +49,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "PCSX2"
 include ':app'
+include ':lemuroid-touchinput'
 
 if (enableRN) {
     def nativeModulesSettingsFile = file('node_modules/@react-native-community/cli-platform-android/native_modules.gradle')

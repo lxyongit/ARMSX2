@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">Xong</string>
+    <string name="touch_customize_button_reset">Đặt lại</string>
+    <string name="touch_customize_info">Kéo và phóng bằng hai ngón tay mục điều khiển để thay đổi vị trí và kích thước</string>
+
+    <string name="adjust_buttons_reset">Đặt lại</string>
+    <string name="adjust_buttons_save">Lưu</string>
+    <string name="touch_customize_dpad_style_analog">D-Pad kiểu cần Analog</string>
+</resources>

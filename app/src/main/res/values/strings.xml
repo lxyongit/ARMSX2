@@ -389,4 +389,46 @@ Open it later from Settings → Open ARMSX2 directory.</string>
     <string name="home_background_cleared">Background cleared.</string>
     <string name="home_preflight_boot_bios">Preflight: booting BIOS...</string>
     <string name="home_preflight_launch_selected_game">Preflight: launching selected game...</string>
+
+     <string name="ps2_per_game_settings">Per-Game Settings</string>
+    <string name="ps2_aspect_ratio">Aspect Ratio</string>
+    <string name="ps2_blending_accuracy">Blending Accuracy</string>
+    <string name="ps2_renderer">Renderer</string>
+    <string name="ps2_resolution_multiplier">Resolution Multiplier</string>
+    <string name="ps2_widescreen_patches">Widescreen Patches</string>
+    <string name="ps2_no_interlacing_patches">No Interlacing Patches</string>
+    <string name="ps2_enable_patch_codes">Enable Patch Codes</string>
+    <string name="ps2_enable_cheats">Enable Cheats</string>
+    <string name="ps2_load_textures">Load Textures (Per Game)</string>
+    <string name="ps2_async_textures">Async Textures (Per Game)</string>
+    <string name="ps2_cancel">Cancel</string>
+    <string name="ps2_save">Save</string>
+    <string name="ps2_blend_min">Minimum</string>
+    <string name="ps2_blend_basic">Basic</string>
+    <string name="ps2_blend_medium">Medium</string>
+    <string name="ps2_blend_high">High</string>
+    <string name="ps2_blend_full">Full</string>
+    <string name="ps2_blend_max">Maximum</string>
+    <string name="ps2_save_states">Save States</string>
+    <string name="ps2_save_slot">Save Slot %1$d</string>
+    <string name="ps2_empty_slot">Empty Slot %1$d</string>
+    <string name="ps2_screenshot">Screenshot</string>
+    <string name="ps2_enlarged_screenshot">Enlarged Screenshot</string>
+    <string name="ps2_close">Close</string>
+    <string name="ps2_load">Load</string>
+    <string name="ps2_overwrite_confirm_title">Overwrite Save State</string>
+    <string name="ps2_overwrite_confirm_message">Are you sure you want to overwrite this save state?</string>
+    <string name="ps2_confirm">Confirm</string>
+    <string name="ps2_mipmap_mode">Mipmap Mode</string>
+    <string name="ps2_half_pixel_offset">Half Pixel Offset</string>
+    <string name="ps2_texture_preloading">Texture Preloading</string>
+    <string name="ps2_limiter_mode">Limiter Mode</string>
+    <string name="ps2_precache_textures">Precache Textures</string>
+    <string name="ps2_shade_boost">Shade Boost</string>
+    <string name="ps2_shade_boost_brightness">Shade Boost Brightness</string>
+    <string name="ps2_shade_boost_contrast">Shade Boost Contrast</string>
+    <string name="ps2_shade_boost_saturation">Shade Boost Saturation</string>
+    <string name="ps2_ee_cycle_rate">EE Cycle Rate</string>
+    <string name="ps2_ee_cycle_skip">EE Cycle Skip</string>
+
 </resources>

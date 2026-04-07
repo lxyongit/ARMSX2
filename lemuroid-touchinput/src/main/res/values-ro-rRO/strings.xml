@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="touch_customize_button_done">Gata</string>
+    <string name="touch_customize_button_reset">Reset</string>
+    <string name="touch_customize_info">Comenzi Drag and Pinch pentru a schimba poziția și dimensiunea</string>
+
+    <string name="adjust_buttons_reset">Resetare</string>
+    <string name="adjust_buttons_save">Salvare</string>
+    <string name="touch_customize_dpad_style_analog">D-Pad stil stick analogic</string>
+</resources>
