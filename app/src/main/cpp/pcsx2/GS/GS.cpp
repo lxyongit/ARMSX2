@@ -945,6 +945,7 @@ void GSFreeWrappedMemory(void* ptr, size_t size, size_t repeat)
 #include <unistd.h>
 #ifdef __ANDROID__
 #include <android/sharedmem.h>
+#include <dlfcn.h>
 #endif
 
 static int s_shm_fd = -1;
@@ -969,7 +970,23 @@ void* GSAllocateWrappedMemory(size_t size, size_t repeat)
 	if (ftruncate(s_shm_fd, repeat * size) < 0)
 		fprintf(stderr, "Failed to reserve memory due to %s\n", strerror(errno));
 #else
-    s_shm_fd = ASharedMemory_create(file_name, repeat * size);
+    typedef int (*ASharedMemory_create_func)(const char *, size_t);
+    static ASharedMemory_create_func p_ASharedMemory_create = nullptr;
+    static bool checked_ashmem = false;
+    if (!checked_ashmem) {
+        void* lib = dlopen("libandroid.so", RTLD_NOW);
+        if (lib) {
+            p_ASharedMemory_create = (ASharedMemory_create_func)dlsym(lib, "ASharedMemory_create");
+        }
+        checked_ashmem = true;
+    }
+    
+    if (p_ASharedMemory_create) {
+        s_shm_fd = p_ASharedMemory_create(file_name, repeat * size);
+    } else {
+        fprintf(stderr, "ASharedMemory_create requires Android API 26+\n");
+        return nullptr;
+    }
     if (s_shm_fd < 0)
     {
         fprintf(stderr, "Failed to open shared memory\n");

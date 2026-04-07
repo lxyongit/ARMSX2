@@ -1834,7 +1834,8 @@ void recompileNextInstruction(bool delayslot, bool swapped_delay_slot)
     u32 s_nEndBlock_pc = (s_nEndBlock - pc) / 4 + 1;
     if (pc <= s_nEndBlock && (g_pCurInstInfo + s_nEndBlock_pc) <= s_pInstCache + s_nInstCacheSize)
     {
-        int i, count;
+		uint i;
+		int count;
         for (i = 0; i < iREGCNT_GPR; ++i)
         {
             if (x86regs[i].inuse)
