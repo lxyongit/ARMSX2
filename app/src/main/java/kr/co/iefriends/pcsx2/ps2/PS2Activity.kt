@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import kr.co.iefriends.pcsx2.NativeApp
+import android.util.Log
 
 class PS2Activity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,12 +39,24 @@ class PS2Activity : ComponentActivity() {
         val biosFolder = intent.getStringExtra("biosFolder") ?: ""
         val ps2BaseFolder = intent.getStringExtra("ps2BaseFolder") ?: ""
         val gameFile = intent.getStringExtra("gameFile") ?: ""
+        val cheatsPath = intent.getStringExtra("cheatsPath") ?: ""
+        
+        Log.d("cheats PS2Activity", "Received intent extras - biosFolder: $biosFolder, ps2BaseFolder: $ps2BaseFolder, gameFile: $gameFile, cheatsPath: $cheatsPath")
+        val bundle = intent.extras
+        if (bundle != null) {
+            for (key in bundle.keySet()) {
+                Log.d("cheats PS2Activity", "Intent Extra Key: $key, Value: ${bundle.get(key)}")
+            }
+        } else {
+            Log.d("cheats PS2Activity", "Intent extras bundle is null")
+        }
 
         setContent {
             PS2View(
                 biosFolder = biosFolder,
                 ps2BaseFolder = ps2BaseFolder,
                 gameFile = gameFile,
+                cheatsPath = cheatsPath,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -71,5 +85,12 @@ class PS2Activity : ComponentActivity() {
         if (hasFocus) {
             hideStatusBar()
         }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        NativeApp.onNativeSurfaceDestroyed()
+        NativeApp.shutdownAndWait()
+        super.onBackPressed()
     }
 }

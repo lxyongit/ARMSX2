@@ -150,7 +150,7 @@ data class PS2Config(
     val enablePatches: Boolean = true,
 
     /** 启用用户自定义金手指（pnach 文件）。 */
-    val enableCheats: Boolean = false,
+    val enableCheats: Boolean = true,
 
     // ---------- [EmuCore/Speedhacks] ----------
 
@@ -168,6 +168,9 @@ data class PS2Config(
 
     /** 帧限制器 / 速度模式。 */
     val limiterMode: LimiterMode = LimiterMode.Nominal,
+
+    /** 正常运行速度（倍数，如 0.5、1.0、2.0 等）。 */
+    val nominalScalar: Float = 1.0f,
 
     // ---------- 全局选项（不写入单游戏 INI） ----------
 
@@ -211,6 +214,9 @@ data class PS2Config(
         appendLine("[EmuCore/Speedhacks]")
         appendLine("EECycleRate=$eeCycleRate")
         appendLine("EECycleSkip=$eeCycleSkip")
+        appendLine()
+        appendLine("[Framerate]")
+        appendLine("NominalScalar=$nominalScalar")
     }
 
     // ==================== 应用到模拟器 ====================
@@ -228,6 +234,7 @@ data class PS2Config(
         NativeApp.setSetting("EmuCore/GS", "ShadeBoostBrightness", "int", shadeBoostBrightness.toString())
         NativeApp.setSetting("EmuCore/GS", "ShadeBoostContrast", "int", shadeBoostContrast.toString())
         NativeApp.setSetting("EmuCore/GS", "ShadeBoostSaturation", "int", shadeBoostSaturation.toString())
+        NativeApp.setSetting("Framerate", "NominalScalar", "float", nominalScalar.toString())
         NativeApp.speedhackEecyclerate(eeCycleRate)
         NativeApp.speedhackEecycleskip(eeCycleSkip)
         NativeApp.speedhackLimitermode(limiterMode.id)
@@ -251,6 +258,7 @@ data class PS2Config(
         shadeBoostBrightness = shadeBoostBrightness.coerceIn(0, 200),
         shadeBoostContrast   = shadeBoostContrast.coerceIn(0, 200),
         shadeBoostSaturation = shadeBoostSaturation.coerceIn(0, 200),
+        nominalScalar        = nominalScalar.coerceIn(0.05f, 10.0f),
         eeCycleRate          = eeCycleRate.coerceIn(-3, 3),
         eeCycleSkip          = eeCycleSkip.coerceIn(0, 3)
     )
@@ -286,10 +294,11 @@ data class PS2Config(
                 enableWideScreenPatches    = sp.getBoolean("widescreen_patches", true),
                 enableNoInterlacingPatches = sp.getBoolean("no_interlacing_patches", true),
                 enablePatches              = sp.getBoolean("enable_patches", true),
-                enableCheats               = sp.getBoolean("enable_cheats", false),
+                enableCheats               = sp.getBoolean("enable_cheats", true),
                 eeCycleRate                = sp.getInt("ee_cycle_rate", 0),
                 eeCycleSkip                = sp.getInt("ee_cycle_skip", 0),
                 limiterMode                = LimiterMode.fromId(sp.getInt("limiter_mode", 0)),
+                nominalScalar              = sp.getFloat("nominal_scalar", 1.0f),
                 loadTextures               = sp.getBoolean("load_textures", false),
                 asyncTextureLoading        = sp.getBoolean("async_texture_loading", true),
                 precacheTextureReplacements = sp.getBoolean("precache_texture_replacements", false)
@@ -317,6 +326,7 @@ data class PS2Config(
                 putInt("ee_cycle_rate", config.eeCycleRate)
                 putInt("ee_cycle_skip", config.eeCycleSkip)
                 putInt("limiter_mode", config.limiterMode.id)
+                putFloat("nominal_scalar", config.nominalScalar)
                 putBoolean("load_textures", config.loadTextures)
                 putBoolean("async_texture_loading", config.asyncTextureLoading)
                 putBoolean("precache_texture_replacements", config.precacheTextureReplacements)
@@ -377,11 +387,20 @@ data class PS2Config(
                 Pattern.compile("(?m)^${Pattern.quote(key)}=\\s*(.+)$")
                     .matcher(content).run { if (find()) group(1)?.trim() else null }
 
-            fun bool(key: String, default: Boolean): Boolean =
-                str(key)?.lowercase()?.toBooleanStrictOrNull() ?: default
+            fun bool(key: String, default: Boolean): Boolean {
+                val s = str(key)?.lowercase()
+                return when (s) {
+                    "true", "1", "yes", "on" -> true
+                    "false", "0", "no", "off" -> false
+                    else -> default
+                }
+            }
 
             fun int(key: String, default: Int): Int =
                 str(key)?.toIntOrNull() ?: default
+
+            fun float(key: String, default: Float): Float =
+                str(key)?.toFloatOrNull() ?: default
 
             // 渲染器可存储为名称（"Vulkan"）或旧版整数（"14"）。
             val renderer: GSRenderer = str("Renderer")?.let { raw ->
@@ -405,7 +424,8 @@ data class PS2Config(
                 enablePatches              = bool("EnablePatches", base.enablePatches),
                 enableCheats               = bool("EnableCheats", base.enableCheats),
                 eeCycleRate                = int("EECycleRate", base.eeCycleRate).coerceIn(-3, 3),
-                eeCycleSkip                = int("EECycleSkip", base.eeCycleSkip).coerceIn(0, 3)
+                eeCycleSkip                = int("EECycleSkip", base.eeCycleSkip).coerceIn(0, 3),
+                nominalScalar              = float("NominalScalar", base.nominalScalar).coerceIn(0.05f, 10.0f)
                 // limiterMode / 纹理替换标志：不在单游戏 INI 中，保留基础值
             )
         }

@@ -43,7 +43,7 @@ public class RNActivity extends AppCompatActivity implements DefaultHardwareBack
             boolean addedAnyPackage = false;
             String[] candidatePackageListClasses = new String[] {
                     "com.facebook.react.PackageList",
-                    BuildConfig.APPLICATION_ID + ".PackageList",
+                    BuildConfig.LIBRARY_PACKAGE_NAME + ".PackageList",
             };
             for (String className : candidatePackageListClasses) {
                 if (addedAnyPackage) break;

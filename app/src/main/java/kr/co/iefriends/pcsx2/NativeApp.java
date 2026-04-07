@@ -86,6 +86,7 @@ public class NativeApp {
 	public static native String getGameTitle(String path);
 	public static native String getGameSerial();
 	public static native boolean hasWidescreenPatch();
+	public static native void reloadCheats();
 	public static native float getFPS();
 
 	public static native String getPauseGameTitle();
@@ -160,4 +161,22 @@ public class NativeApp {
     public static native String getCustomDriverPath();
     public static native void setNativeLibraryDir(String path);
 	public static native boolean changeDisc(String path);
+    
+    private static Thread emuThread = null;
+    
+    public static void setEmuThread(Thread thread) {
+        emuThread = thread;
+    }
+    
+    public static void shutdownAndWait() {
+        shutdown();
+        if (emuThread != null) {
+            try {
+                emuThread.join();
+            } catch (InterruptedException ignored) {
+                Thread.currentThread().interrupt();
+            }
+            emuThread = null;
+        }
+    }
 }

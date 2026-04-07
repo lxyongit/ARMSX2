@@ -28,12 +28,14 @@ import gg.padkit.inputevents.InputEvent
 import android.view.KeyEvent
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import java.io.File
 
 @Composable
 fun PS2View(
     biosFolder: String,
     ps2BaseFolder: String,
     gameFile: String,
+    cheatsPath: String,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -43,16 +45,28 @@ fun PS2View(
 
     if (showMenu) {
         PS2Menu(
+            cheatsPath = cheatsPath,
+            ps2BaseFolder = ps2BaseFolder,
             onDismiss = { showMenu = false }
         )
     }
 
     DisposableEffect(Unit) {
+        val cheatsDir = File(ps2BaseFolder, "cheats")
+        if (cheatsDir.exists()) {
+            cheatsDir.listFiles()?.forEach {
+                if (it.isFile && it.name.endsWith(".pnach")) {
+                    it.delete()
+                }
+            }
+        }
+
         NativeApp.initializeOnce(context)
         NativeApp.initialize(ps2BaseFolder, android.os.Build.VERSION.SDK_INT)
         
         onDispose {
-            NativeApp.shutdown()
+            NativeApp.onNativeSurfaceDestroyed()
+            NativeApp.shutdownAndWait()
         }
     }
 
@@ -81,12 +95,13 @@ fun PS2View(
                                     Thread.sleep(500) // Mimic PSX2 delay for Native app to settle
                                     NativeApp.runVMThread(gameFile)
                                 }
+                                NativeApp.setEmuThread(thread)
                                 thread.start()
                             }
                         }
 
                         override fun surfaceDestroyed(holder: SurfaceHolder) {
-                            NativeApp.onNativeSurfaceChanged(null, 0, 0)
+                            NativeApp.onNativeSurfaceDestroyed()
                         }
                     })
                 }

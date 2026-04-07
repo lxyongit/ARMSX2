@@ -18,6 +18,12 @@ import kr.co.iefriends.pcsx2.NativeApp
 import androidx.compose.ui.res.stringResource
 import kr.co.iefriends.pcsx2.R
 import kotlin.math.roundToInt
+import kr.co.iefriends.pcsx2.ps2.cheats.*
+import org.json.JSONArray
+import java.io.File
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
+import android.util.Log
 
 val ASPECT_RATIOS = listOf("拉伸", "自动 4:3/3:2", "4:3", "16:9", "10:7")
 val RENDERERS = listOf("自动", "Vulkan", "OpenGL", "软件")
@@ -27,6 +33,62 @@ val HALF_PIXEL_OFFSETS = listOf("关闭", "普通", "特殊", "特殊（激进�
 val TEXTURE_PRELOADINGS = listOf("禁用", "部分", "完整")
 val LIMITER_MODES = listOf("正常", "慢动作", "加速", "无限制")
 val EE_CYCLE_SKIPS = listOf("0（关闭）", "1", "2", "3")
+val RUNNING_SPEEDS = listOf("0.5", "1", "2", "3", "4", "5")
+val RUNNING_SPEED_VALUES = listOf(0.5f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f)
+
+fun parseCheatsJson(filePath: String): List<Cheat> {
+    if (filePath.isBlank()) {
+        Log.d("cheats", "parseCheatsJson: filePath is blank")
+        return emptyList()
+    }
+    val file = File(filePath)
+    if (!file.exists()) {
+        Log.d("cheats", "parseCheatsJson: file does not exist at $filePath")
+        return emptyList()
+    }
+    
+    Log.d("cheats", "parseCheatsJson: attempting to parse file at $filePath")
+    val cheats = mutableListOf<Cheat>()
+    try {
+        val content = file.readText()
+        Log.d("cheats", "parseCheatsJson: file content length = ${content.length}")
+        
+        val jsonArray = JSONArray(content)
+        Log.d("cheats", "parseCheatsJson: jsonArray length = ${jsonArray.length()}")
+        
+        for (i in 0 until jsonArray.length()) {
+            val item = jsonArray.getJSONObject(i)
+            val title = item.optString("title", "Unknown")
+            val optionsArray = item.optJSONArray("options")
+            
+            if (optionsArray != null) {
+                val options = mutableListOf<CheatOption>()
+                for (j in 0 until optionsArray.length()) {
+                    val opt = optionsArray.getJSONObject(j)
+                    val desc = opt.optString("description", "")
+                    val valueObj = opt.opt("value")
+                    val valueStr = when (valueObj) {
+                        is org.json.JSONArray -> {
+                            val list = mutableListOf<String>()
+                            for (k in 0 until valueObj.length()) list.add(valueObj.optString(k))
+                            list.joinToString("\n")
+                        }
+                        else -> valueObj?.toString() ?: ""
+                    }
+                    options.add(CheatOption(name = desc, code = valueStr))
+                }
+                cheats.add(Cheat(name = title, code = "", enabled = false, options = options, selectedOptionIndex = 0, isCustom = false))
+                Log.d("cheats", "parseCheatsJson: Added cheat '$title' with ${options.size} options")
+            } else {
+                Log.d("cheats", "parseCheatsJson: No options array for item '$title'")
+            }
+        }
+        Log.d("cheats", "parseCheatsJson: successfully parsed ${cheats.size} cheats")
+    } catch (e: Exception) {
+        Log.e("cheats", "parseCheatsJson: error parsing json", e)
+    }
+    return cheats
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,12 +96,17 @@ fun PS2Menu(
     gameTitle: String = "",
     gameSerial: String = "",
     gameCrc: String = "",
+    cheatsPath: String = "",
+    ps2BaseFolder: String = "",
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
 
     var config by remember { mutableStateOf(PS2Config.DEFAULT) }
     var showStatesView by remember { mutableStateOf(false) }
+    var showCheatsView by remember { mutableStateOf(false) }
+    var showAddCheatDialog by remember { mutableStateOf(false) }
+    var actualGameSerial by remember { mutableStateOf(gameSerial) }
 
     DisposableEffect(Unit) {
         NativeApp.pause()
@@ -48,10 +115,12 @@ fun PS2Menu(
         }
     }
 
+    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         val serial = gameSerial.ifEmpty {
             try { NativeApp.getGameSerial() } catch (e: Exception) { "" }
         } ?: ""
+        actualGameSerial = serial
 
         val globalConfig = PS2Config.loadGlobal(context)
         config = if (serial.isNotEmpty()) {
@@ -77,6 +146,108 @@ fun PS2Menu(
         )
     }
 
+    if (showCheatsView) {
+        Log.d("cheats", "showCheatsView == true, initializing ViewModel. cheatsPath=$cheatsPath")
+        val sharedPreferences = context.getSharedPreferences("CheatsBase", android.content.Context.MODE_PRIVATE)
+        val initialCheats = remember(cheatsPath) { parseCheatsJson(cheatsPath) }
+        Log.d("cheats", "initialCheats size = ${initialCheats.size}")
+        
+        val cheatsViewModel: GameMenuCheatsViewModel = viewModel(
+            key = "cheats_${actualGameSerial.hashCode()}_${cheatsPath.hashCode()}",
+            factory = GameMenuCheatsViewModel.Factory(
+                initialCheats,
+                sharedPreferences,
+                actualGameSerial.hashCode(),
+                "ps2"
+            )
+        )
+        val cheats by cheatsViewModel.cheats.collectAsState()
+        Log.d("cheats", "Collected cheats size from ViewModel = ${cheats.size}")
+        
+        LaunchedEffect(cheats) {
+            val enabledCodeLines = StringBuilder()
+            for (cheat in cheats) {
+                if (cheat.enabled) {
+                    val code = if (cheat.options.isNotEmpty()) {
+                        val index = if (cheat.selectedOptionIndex >= 0) cheat.selectedOptionIndex else 0
+                        cheat.options.getOrNull(index)?.code
+                    } else cheat.code
+                    
+                    if (!code.isNullOrBlank()) {
+                        enabledCodeLines.appendLine(code)
+                    }
+                }
+            }
+            
+            val pauseGameSerial = try { NativeApp.getPauseGameSerial() } catch (e: Exception) { "" }
+            val actualCrc = gameCrc.ifEmpty {
+                Regex("\\((.*?)\\)").find(pauseGameSerial)?.groupValues?.get(1) ?: ""
+            }
+            
+            if (actualCrc.isNotEmpty() && ps2BaseFolder.isNotEmpty()) {
+                val dbFolder = File(ps2BaseFolder, "cheats")
+                if (!dbFolder.exists()) dbFolder.mkdirs()
+                val cheatFile = File(dbFolder, "$actualCrc.pnach")
+                
+                val pnachLines = enabledCodeLines.toString().lines().filter { it.isNotBlank() }.map {
+                    if (!it.startsWith("patch=1,")) "patch=1,$it" else it
+                }.joinToString("\n")
+                
+                cheatFile.writeText(pnachLines)
+            }
+            
+            if (config.enableCheats) {
+                try { 
+                    NativeApp.setEnableCheats(true) 
+                    NativeApp.reloadCheats()
+                } catch (e: Exception) { e.printStackTrace() }
+            }
+        }
+
+        Dialog(onDismissRequest = { showCheatsView = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                modifier = Modifier.fillMaxWidth(0.95f).fillMaxHeight(0.95f)
+            ) {
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("金手指管理", style = MaterialTheme.typography.titleMedium)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Button(
+                                onClick = { showAddCheatDialog = true },
+                                modifier = Modifier.height(32.dp),
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp)
+                            ) {
+                                Text("新建", style = MaterialTheme.typography.bodyMedium)
+                            }
+                            Button(
+                                onClick = { showCheatsView = false },
+                                modifier = Modifier.height(32.dp),
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp)
+                            ) {
+                                Text("返回", style = MaterialTheme.typography.bodyMedium)
+                            }
+                        }
+                    }
+                    Box(modifier = Modifier.weight(1f)) {
+                        GameMenuCheatsScreen(
+                            viewModel = cheatsViewModel,
+                            showAddDialog = showAddCheatDialog,
+                            onDismissAddDialog = { showAddCheatDialog = false },
+                            onBack = { showCheatsView = false }
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    if (!showCheatsView && !showStatesView) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(
             shape = MaterialTheme.shapes.medium,
@@ -92,8 +263,29 @@ fun PS2Menu(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(stringResource(R.string.ps2_per_game_settings), style = MaterialTheme.typography.titleMedium)
-                    Button(onClick = { showStatesView = true }) {
-                        Text(stringResource(R.string.ps2_save_states))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Button(onClick = { 
+                            NativeApp.onNativeSurfaceDestroyed()
+                            NativeApp.shutdownAndWait()
+                            (context as? android.app.Activity)?.recreate()
+                            onDismiss()
+                        }) {
+                            Text("重新开始")
+                        }
+                        Button(onClick = { 
+                            NativeApp.onNativeSurfaceDestroyed()
+                            NativeApp.shutdownAndWait()
+                            (context as? android.app.Activity)?.finish()
+                            onDismiss()
+                        }) {
+                            Text("退出")
+                        }
+                        Button(onClick = { showCheatsView = true }) {
+                            Text("金手指")
+                        }
+                        Button(onClick = { showStatesView = true }) {
+                            Text(stringResource(R.string.ps2_save_states))
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -123,20 +315,18 @@ fun PS2Menu(
                             config = config.copy(blendingAccuracy = AccBlendLevel.fromId(it))
                         }
                     }
-                }
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
                         DropdownMenuField(stringResource(R.string.ps2_renderer), RENDERERS, config.renderer.menuIndex) {
                             config = config.copy(renderer = GSRenderer.fromMenuIndex(it))
                         }
                     }
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
                         DropdownMenuField(stringResource(R.string.ps2_resolution_multiplier), RESOLUTIONS, config.upscaleMultiplier - 1) {
                             config = config.copy(upscaleMultiplier = it + 1)
                         }
                     }
-                }
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
                         DropdownMenuField(stringResource(R.string.ps2_mipmap_mode), MIPMAP_MODES, config.mipmapMode.id) {
                             config = config.copy(mipmapMode = MipmapMode.fromId(it))
@@ -154,9 +344,22 @@ fun PS2Menu(
                             config = config.copy(texturePreloading = TexturePreloading.fromId(it))
                         }
                     }
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
                         DropdownMenuField(stringResource(R.string.ps2_limiter_mode), LIMITER_MODES, config.limiterMode.id) {
                             config = config.copy(limiterMode = LimiterMode.fromId(it))
+                        }
+                    }
+                    Box(modifier = Modifier.weight(1f)) {
+                        val currentSpeedIndex = RUNNING_SPEED_VALUES.indexOfFirst { kotlin.math.abs(it - config.nominalScalar) < 0.01f }.takeIf { it >= 0 } ?: 1
+                        DropdownMenuField("运行速度", RUNNING_SPEEDS, currentSpeedIndex) {
+                            config = config.copy(nominalScalar = RUNNING_SPEED_VALUES[it])
+                        }
+                    }
+                    Box(modifier = Modifier.weight(1f)) {
+                        DropdownMenuField(stringResource(R.string.ps2_ee_cycle_skip), EE_CYCLE_SKIPS, config.eeCycleSkip) {
+                            config = config.copy(eeCycleSkip = it)
                         }
                     }
                 }
@@ -174,20 +377,18 @@ fun PS2Menu(
                             config = config.copy(enableNoInterlacingPatches = it)
                         }
                     }
-                }
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
                         SwitchField(stringResource(R.string.ps2_enable_patch_codes), config.enablePatches) {
                             config = config.copy(enablePatches = it)
                         }
                     }
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
                         SwitchField(stringResource(R.string.ps2_enable_cheats), config.enableCheats) {
                             config = config.copy(enableCheats = it)
                         }
                     }
-                }
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
                         SwitchField(stringResource(R.string.ps2_load_textures), config.loadTextures) {
                             config = config.copy(loadTextures = it)
@@ -210,6 +411,7 @@ fun PS2Menu(
                             config = config.copy(shadeBoost = it)
                         }
                     }
+                    Box(modifier = Modifier.weight(1f)) { /* placeholder */ }
                 }
                 if (config.shadeBoost) {
                     SliderField(stringResource(R.string.ps2_shade_boost_brightness), config.shadeBoostBrightness, 0..200) {
@@ -230,14 +432,7 @@ fun PS2Menu(
                 ) {
                     config = config.copy(eeCycleRate = it)
                 }
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Box(modifier = Modifier.weight(1f)) {
-                        DropdownMenuField(stringResource(R.string.ps2_ee_cycle_skip), EE_CYCLE_SKIPS, config.eeCycleSkip) {
-                            config = config.copy(eeCycleSkip = it)
-                        }
-                    }
-                    Box(modifier = Modifier.weight(1f)) { /* placeholder */ }
-                }
+
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -270,6 +465,7 @@ fun PS2Menu(
                 }
             }
         }
+    }
     }
 }
 
