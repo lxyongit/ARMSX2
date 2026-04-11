@@ -6,6 +6,8 @@ import android.os.Environment
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
@@ -20,6 +22,8 @@ import kr.co.iefriends.pcsx2.NativeApp
 import android.util.Log
 
 class PS2Activity : ComponentActivity() {
+    private var gamepadManager: PS2GamepadManager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -40,6 +44,8 @@ class PS2Activity : ComponentActivity() {
         val ps2BaseFolder = intent.getStringExtra("ps2BaseFolder") ?: ""
         val gameFile = intent.getStringExtra("gameFile") ?: ""
         val cheatsPath = intent.getStringExtra("cheatsPath") ?: ""
+        val manager = PS2GamepadManager(this).also { it.start() }
+        gamepadManager = manager
         
         Log.d("cheats PS2Activity", "Received intent extras - biosFolder: $biosFolder, ps2BaseFolder: $ps2BaseFolder, gameFile: $gameFile, cheatsPath: $cheatsPath")
         val bundle = intent.extras
@@ -57,6 +63,7 @@ class PS2Activity : ComponentActivity() {
                 ps2BaseFolder = ps2BaseFolder,
                 gameFile = gameFile,
                 cheatsPath = cheatsPath,
+                gamepadManager = manager,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -85,6 +92,31 @@ class PS2Activity : ComponentActivity() {
         if (hasFocus) {
             hideStatusBar()
         }
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (gamepadManager?.handleKeyEvent(event) == true) {
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
+    override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
+        if (gamepadManager?.handleMotionEvent(event) == true) {
+            return true
+        }
+        return super.dispatchGenericMotionEvent(event)
+    }
+
+    override fun onStop() {
+        gamepadManager?.releaseAllInputs()
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        gamepadManager?.stop()
+        gamepadManager = null
+        super.onDestroy()
     }
 
     @Deprecated("Deprecated in Java")

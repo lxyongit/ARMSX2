@@ -540,6 +540,9 @@ Java_kr_co_iefriends_pcsx2_NativeApp_setPadVibration(JNIEnv *env, jclass clazz,
 extern "C" JNIEXPORT void JNICALL
 Java_kr_co_iefriends_pcsx2_NativeApp_setPadButton(JNIEnv *env, jclass clazz,
                                                   jint p_key, jint p_range, jboolean p_keyPressed) {
+    if (!VMManager::HasValidVM())
+        return;
+
     PadDualshock2::Inputs _key;
     switch (p_key) {
         case 19: _key = PadDualshock2::Inputs::PAD_UP; break;
@@ -582,6 +585,9 @@ Java_kr_co_iefriends_pcsx2_NativeApp_setPadButton(JNIEnv *env, jclass clazz,
 
 extern "C" JNIEXPORT void JNICALL
 Java_kr_co_iefriends_pcsx2_NativeApp_resetKeyStatus(JNIEnv *env, jclass clazz) {
+    if (!VMManager::HasValidVM())
+        return;
+
     for (u32 pad = 0; pad < Pad::NUM_CONTROLLER_PORTS; pad++)
     {
         for (u32 key = 0; key < static_cast<u32>(PadDualshock2::Inputs::LENGTH); key++)
