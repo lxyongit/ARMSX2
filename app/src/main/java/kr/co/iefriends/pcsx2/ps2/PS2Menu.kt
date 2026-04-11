@@ -1,6 +1,7 @@
 package kr.co.iefriends.pcsx2.ps2
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.ui.draw.scale
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,7 +23,6 @@ import kr.co.iefriends.pcsx2.ps2.cheats.*
 import org.json.JSONArray
 import java.io.File
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.launch
 import android.util.Log
 
 val ASPECT_RATIOS = listOf("拉伸", "自动 4:3/3:2", "4:3", "16:9", "10:7")
@@ -98,6 +98,9 @@ fun PS2Menu(
     gameCrc: String = "",
     cheatsPath: String = "",
     ps2BaseFolder: String = "",
+    hasConnectedController: Boolean = false,
+    connectedControllerName: String = "",
+    onOpenControllerMapping: (() -> Unit)? = null,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -115,7 +118,6 @@ fun PS2Menu(
         }
     }
 
-    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         val serial = gameSerial.ifEmpty {
             try { NativeApp.getGameSerial() } catch (e: Exception) { "" }
@@ -263,7 +265,10 @@ fun PS2Menu(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(stringResource(R.string.ps2_per_game_settings), style = MaterialTheme.typography.titleMedium)
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         Button(onClick = { 
                             NativeApp.onNativeSurfaceDestroyed()
                             NativeApp.shutdownAndWait()
@@ -283,12 +288,25 @@ fun PS2Menu(
                         Button(onClick = { showCheatsView = true }) {
                             Text("金手指")
                         }
+                        if (hasConnectedController && onOpenControllerMapping != null) {
+                            Button(onClick = onOpenControllerMapping) {
+                                Text("按钮映射")
+                            }
+                        }
                         Button(onClick = { showStatesView = true }) {
                             Text(stringResource(R.string.ps2_save_states))
                         }
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
+
+                if (hasConnectedController && connectedControllerName.isNotBlank()) {
+                    Text(
+                        text = "已连接手柄: $connectedControllerName",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
                 
                 Column(
                     modifier = Modifier
