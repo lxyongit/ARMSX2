@@ -12,7 +12,7 @@
 	<string name="controller_key_mode">Modalita</string>
 	<string name="controller_connected_hint">Controller connesso: %1$s. Puoi cambiarne la mappatura dal menu.</string>
 	<string name="controller_disconnected">Controller disconnesso: %1$s</string>
-	<string name="ps2_storage_permission_required">Per caricare i giochi PS2 e richiesto l'accesso a tutti i file.</string>
+	<string name="ps2_storage_permission_required">Per caricare i giochi PS2 e richiesto l’accesso a tutti i file.</string>
 	<string name="ps2_cheats">Trucchi</string>
 	<string name="ps2_cheats_manager_title">Gestore trucchi</string>
 	<string name="ps2_new">Nuovo</string>

@@ -6,13 +6,13 @@
 	<string name="controller_mapping_sticks_triggers">Sticks et gachettes</string>
 	<string name="controller_mapping_axis_summary">Le stick gauche utilise X/Y. Le stick droit prefere RX/RY et revient a Z/RZ si necessaire. L2/R2 lisent automatiquement les axes des gachettes.</string>
 	<string name="controller_mapping_menu_hint">La touche Menu peut aussi etre attribuee et ouvre le menu du jeu quand elle est pressee.</string>
-	<string name="controller_mapping_waiting_for">En attente d'entree : %1$s</string>
+	<string name="controller_mapping_waiting_for">En attente d’entree : %1$s</string>
 	<string name="controller_mapping_saved">Configuration de la manette enregistree pour %1$s</string>
 	<string name="controller_action_menu">Menu</string>
 	<string name="controller_key_mode">Mode</string>
 	<string name="controller_connected_hint">Manette connectee : %1$s. Vous pouvez modifier son attribution depuis le menu.</string>
 	<string name="controller_disconnected">Manette deconnectee : %1$s</string>
-	<string name="ps2_storage_permission_required">L'acces a tous les fichiers est requis pour charger les jeux PS2.</string>
+	<string name="ps2_storage_permission_required">L’acces a tous les fichiers est requis pour charger les jeux PS2.</string>
 	<string name="ps2_cheats">Triches</string>
 	<string name="ps2_cheats_manager_title">Gestionnaire de triches</string>
 	<string name="ps2_new">Nouveau</string>
@@ -20,7 +20,7 @@
 	<string name="ps2_restart">Redemarrer</string>
 	<string name="ps2_exit">Quitter</string>
 	<string name="ps2_connected_controller">Manette connectee : %1$s</string>
-	<string name="ps2_run_speed">Vitesse d'execution</string>
+	<string name="ps2_run_speed">Vitesse d’execution</string>
 	<string name="ps2_aspect_ratio_stretch">Etendre</string>
 	<string name="ps2_aspect_ratio_auto">Auto 4:3/3:2</string>
 	<string name="ps2_renderer_auto">Auto</string>

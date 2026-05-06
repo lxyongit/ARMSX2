@@ -20,7 +20,7 @@
 	<string name="ps2_restart">Reinicia</string>
 	<string name="ps2_exit">Sortir</string>
 	<string name="ps2_connected_controller">Controlador connectat: %1$s</string>
-	<string name="ps2_run_speed">Velocitat d'execucio</string>
+	<string name="ps2_run_speed">Velocitat d’execucio</string>
 	<string name="ps2_aspect_ratio_stretch">Estira</string>
 	<string name="ps2_aspect_ratio_auto">Automatic 4:3/3:2</string>
 	<string name="ps2_renderer_auto">Automatic</string>
