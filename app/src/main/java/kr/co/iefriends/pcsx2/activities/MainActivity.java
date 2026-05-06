@@ -56,6 +56,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
 import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.WindowCompat;
@@ -502,7 +503,7 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setTitle(getString(R.string.home_game_selector_title_format, displayName));
             try {
                 androidx.appcompat.graphics.drawable.DrawerArrowDrawable dd = new androidx.appcompat.graphics.drawable.DrawerArrowDrawable(this);
-                dd.setProgress(0f); 
+                dd.setProgress(0f);
                 toolbar.setNavigationIcon(dd);
             } catch (Throwable ignored) {}
             toolbar.setNavigationOnClickListener(v -> {
@@ -564,6 +565,15 @@ public class MainActivity extends AppCompatActivity {
                 bootBios();
             } else if (id == R.id.menu_manage_bios) {
                 showBiosManagerDialog();
+            } else if (id == R.id.menu_run_elf) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !android.os.Environment.isExternalStorageManager()) {
+                    checkAndRequestStoragePermission();
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    startPickElfLauncher.launch(intent);
+                }
             } else if (id == R.id.menu_open_settings) {
                 Intent si = new Intent(this, SettingsActivity.class);
                 startActivityForResult(si, 7722);
@@ -1858,13 +1868,22 @@ public class MainActivity extends AppCompatActivity {
         } else {
             controller.show(WindowInsetsCompat.Type.systemBars());
             controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_DEFAULT);
+            boolean isDarkMode = (getResources().getConfiguration().uiMode &
+                    Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+            controller.setAppearanceLightStatusBars(!isDarkMode);
+            controller.setAppearanceLightNavigationBars(!isDarkMode);
         }
 
         // 7️⃣ Consume all insets on root layout so no padding is added
         View root = findViewById(R.id.in_game_root);
         if (root != null) {
             ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-                v.setPadding(0, 0, 0, 0); // remove any padding for status/nav/cutout
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                if (isHomeVisible()) {
+                    v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                } else {
+                    v.setPadding(0, 0, 0, 0);
+                }
                 return WindowInsetsCompat.CONSUMED;
             });
         }
@@ -3716,32 +3735,44 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 7722 && resultCode == Activity.RESULT_OK && data != null) {
-            if (data.hasExtra("SET_RENDERER")) {
-                int r = data.getIntExtra("SET_RENDERER", -1000);
-                if (r != -1000) {
-                    applyRendererSelection(r);
+        if (requestCode == 7722) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                if (data.getBooleanExtra("RELOAD_GAMES", false)) {
+                    scanGamesFolder(gamesFolderUri);
                 }
-            }
-            if (data.getBooleanExtra(EXTRA_SETTINGS_LAYOUT_CHANGED, false)) {
-                applyFullscreen();
-            }
-            if (data.hasExtra(EXTRA_SETTINGS_GPU_PROFILE_OVERRIDE)) {
-                String selected = data.getStringExtra(EXTRA_SETTINGS_GPU_PROFILE_OVERRIDE);
-                boolean persisted = data.getBooleanExtra(EXTRA_SETTINGS_GPU_PROFILE_PERSISTED, true);
-                if (!TextUtils.isEmpty(selected) && !persisted) {
-                    boolean recovered = false;
-                    try {
-                        NativeApp.setSetting("EmuCore/GS", "AndroidGpuProfileOverride", "string", selected);
-                        String verify = NativeApp.getSetting("EmuCore/GS", "AndroidGpuProfileOverride", "string");
-                        recovered = selected.equalsIgnoreCase(verify);
-                    } catch (Throwable ignored) {}
-                    int msg = recovered
-                            ? R.string.settings_gpu_profile_persist_recovered
-                            : R.string.settings_gpu_profile_persist_failed;
-                    try { Toast.makeText(this, msg, Toast.LENGTH_LONG).show(); } catch (Throwable ignored) {}
-                } else if (!TextUtils.isEmpty(selected)) {
-                    try { Toast.makeText(this, R.string.settings_gpu_profile_saved_hint, Toast.LENGTH_SHORT).show(); } catch (Throwable ignored) {}
+                if (data.hasExtra("SET_RENDERER")) {
+                    int r = data.getIntExtra("SET_RENDERER", -1000);
+                    if (r != -1000) {
+                        applyRendererSelection(r);
+                    }
+                }
+                if (data.getBooleanExtra(EXTRA_SETTINGS_LAYOUT_CHANGED, false)) {
+                    applyFullscreen();
+                }
+                if (data.hasExtra(EXTRA_SETTINGS_GPU_PROFILE_OVERRIDE)) {
+                    String selected = data.getStringExtra(EXTRA_SETTINGS_GPU_PROFILE_OVERRIDE);
+                    boolean persisted = data.getBooleanExtra(EXTRA_SETTINGS_GPU_PROFILE_PERSISTED, true);
+                    if (!TextUtils.isEmpty(selected) && !persisted) {
+                        boolean recovered = false;
+                        try {
+                            NativeApp.setSetting("EmuCore/GS", "AndroidGpuProfileOverride", "string", selected);
+                            String verify = NativeApp.getSetting("EmuCore/GS", "AndroidGpuProfileOverride", "string");
+                            recovered = selected.equalsIgnoreCase(verify);
+                        } catch (Throwable ignored) {
+                        }
+                        int msg = recovered
+                                ? R.string.settings_gpu_profile_persist_recovered
+                                : R.string.settings_gpu_profile_persist_failed;
+                        try {
+                            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+                        } catch (Throwable ignored) {
+                        }
+                    } else if (!TextUtils.isEmpty(selected)) {
+                        try {
+                            Toast.makeText(this, R.string.settings_gpu_profile_saved_hint, Toast.LENGTH_SHORT).show();
+                        } catch (Throwable ignored) {
+                        }
+                    }
                 }
             }
         }
@@ -3785,6 +3816,58 @@ public class MainActivity extends AppCompatActivity {
                     maybeStartOnboardingFlow();
                 }
             });
+
+    private final ActivityResultLauncher<Intent> startPickElfLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    Uri uri = result.getData().getData();
+                    if (uri != null) {
+                        try {
+                            getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            String path = DataDirectoryManager.resolveUriToPath(this, uri);
+
+                            if (path != null && new File(path).exists()) {
+                                NativeApp.setSetting("EmuCore", "HostFs", "bool", "true");
+                                m_szGamefile = path;
+                                showHome(false);
+                                restartEmuThread();
+                            } else {
+                                String cachePath = copyToCache(uri, queryOpenableDisplayName(uri));
+                                if (cachePath != null) {
+                                    m_szGamefile = cachePath;
+                                    showHome(false);
+                                    restartEmuThread();
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "Failed to load ELF", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+
+    private void checkAndRequestStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!android.os.Environment.isExternalStorageManager()) {
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle("Storage Access Required")
+                        .setMessage("To load ELF files from external folders")
+                        .setPositiveButton("Settings", (dialog, which) -> {
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Later", null)
+                        .show();
+            }
+        }
+    }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration p_newConfig) {
@@ -5073,9 +5156,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void scanGamesFolder(Uri folder) {
-    List<GameEntry> entries = GameScanner.scanFolder(this, folder);
+        LinkedHashSet<Uri> roots = collectGameRootUris();
+        if (folder != null) {
+            roots.add(folder);
+        }
+        List<GameEntry> allEntries = new ArrayList<>();
+        for (Uri root : roots) {
+            try {
+                List<GameEntry> folderEntries = GameScanner.scanFolder(this, root);
+                if (folderEntries != null && !folderEntries.isEmpty()) {
+                    allEntries.addAll(folderEntries);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         try {
-            java.util.Collections.sort(entries, (a, b) -> {
+            java.util.Collections.sort(allEntries, (a, b) -> {
                 String ta = a != null ? (a.title != null ? a.title : "") : "";
                 String tb = b != null ? (b.title != null ? b.title : "") : "";
                 int ga = sortGroup(ta);
@@ -5084,9 +5181,11 @@ public class MainActivity extends AppCompatActivity {
                 return ta.compareToIgnoreCase(tb);
             });
         } catch (Throwable ignored) {}
-    gamesAdapter.update(entries);
+
+        gamesAdapter.update(allEntries);
+
         final List<GameEntry> toResolve = new ArrayList<>();
-        for (GameEntry ge : entries) {
+        for (GameEntry ge : allEntries) {
             try {
                 if (ge != null && (ge.serial == null || ge.serial.isEmpty())) {
                     String name = ge.title != null ? ge.title.toLowerCase() : "";
@@ -5098,7 +5197,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!toResolve.isEmpty()) {
             new Thread(() -> {
-                android.content.ContentResolver cr = getContentResolver();
                 int n = 0;
                 for (GameEntry ge : toResolve) {
                     try {
@@ -5135,8 +5233,12 @@ public class MainActivity extends AppCompatActivity {
                 }, 100); 
             });
         }
-        boolean empty = entries.isEmpty();
-    try { Toast.makeText(this, getString(R.string.home_games_found_count, entries.size()), Toast.LENGTH_SHORT).show(); } catch (Throwable ignored) {}
+
+        boolean empty = allEntries.isEmpty();
+        try {
+            Toast.makeText(this, getString(R.string.home_games_found_count, allEntries.size()), Toast.LENGTH_SHORT).show();
+        } catch (Throwable ignored) {}
+
         if (tvEmpty != null) {
             tvEmpty.setText(empty ? getString(R.string.home_no_games_detected) : "");
             tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
