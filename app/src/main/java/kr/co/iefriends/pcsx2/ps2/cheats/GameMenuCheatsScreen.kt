@@ -43,6 +43,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import kr.co.iefriends.pcsx2.R
 
 @Composable
 fun GameMenuCheatsScreen(
@@ -147,7 +148,7 @@ fun CheatItem(
                         ) {
                             Icon(
                                 Icons.Default.Delete,
-                                contentDescription = "Delete",
+                                contentDescription = stringResource(R.string.ps2_delete),
                                 modifier = Modifier.size(16.dp)
                             )
                         }
@@ -161,6 +162,11 @@ fun CheatItem(
                     verticalArrangement = Arrangement.spacedBy(0.dp),
                 ) {
                     cheat.options.forEachIndexed { index, option ->
+                        val optionLabel = if (option.code.isBlank() && option.name.isBlank()) {
+                            stringResource(R.string.ps2_close)
+                        } else {
+                            option.name
+                        }
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.height(24.dp),
@@ -171,7 +177,7 @@ fun CheatItem(
                                 modifier = Modifier.size(24.dp).scale(0.8f),
                             )
                             Text(
-                                text = option.name,
+                                text = optionLabel,
                                 fontSize = 11.sp
                             )
                         }
@@ -195,13 +201,13 @@ fun AddCheatDialog(onDismiss: () -> Unit, onAdd: (String, String) -> Unit) {
             usePlatformDefaultWidth = false
         ),
         modifier = Modifier.fillMaxWidth(0.9f),
-        title = { Text(text = "金手指") },
+        title = { Text(text = stringResource(R.string.ps2_cheats)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
                     value = code,
                     onValueChange = { code = it },
-                    label = { Text("代码") },
+                    label = { Text(stringResource(R.string.ps2_cheat_code)) },
                     placeholder = { Text("") },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 3,
@@ -210,19 +216,19 @@ fun AddCheatDialog(onDismiss: () -> Unit, onAdd: (String, String) -> Unit) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("名称") },
+                    label = { Text(stringResource(R.string.ps2_cheat_name)) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
         },
         confirmButton = {
             Button(onClick = { onAdd(name, code) }) {
-                Text("添加")
+                Text(stringResource(R.string.ps2_add))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("取消")
+                Text(stringResource(R.string.ps2_cancel))
             }
         }
     )

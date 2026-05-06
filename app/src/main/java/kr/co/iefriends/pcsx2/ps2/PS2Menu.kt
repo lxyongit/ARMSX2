@@ -25,16 +25,8 @@ import java.io.File
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.util.Log
 
-val ASPECT_RATIOS = listOf("拉伸", "自动 4:3/3:2", "4:3", "16:9", "10:7")
-val RENDERERS = listOf("自动", "Vulkan", "OpenGL", "软件")
-val RESOLUTIONS = listOf("1× 原生", "2× (720p)", "3× (1080p)", "4× (1440p)", "5× (1800p)", "6× (2160p)", "7× (2520p)", "8× (2880p)")
-val MIPMAP_MODES = listOf("自动", "基础", "完整")
-val HALF_PIXEL_OFFSETS = listOf("关闭", "普通", "特殊", "特殊（激进）")
-val TEXTURE_PRELOADINGS = listOf("禁用", "部分", "完整")
-val LIMITER_MODES = listOf("正常", "慢动作", "加速", "无限制")
-val EE_CYCLE_SKIPS = listOf("0（关闭）", "1", "2", "3")
-val RUNNING_SPEEDS = listOf("0.5", "1", "2", "3", "4", "5")
-val RUNNING_SPEED_VALUES = listOf(0.5f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f)
+private val RUNNING_SPEEDS = listOf("0.5", "1", "2", "3", "4", "5")
+private val RUNNING_SPEED_VALUES = listOf(0.5f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f)
 
 fun parseCheatsJson(filePath: String): List<Cheat> {
     if (filePath.isBlank()) {
@@ -104,6 +96,52 @@ fun PS2Menu(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    val aspectRatios = listOf(
+        stringResource(R.string.ps2_aspect_ratio_stretch),
+        stringResource(R.string.ps2_aspect_ratio_auto),
+        "4:3",
+        "16:9",
+        "10:7",
+    )
+    val renderers = listOf(
+        stringResource(R.string.ps2_renderer_auto),
+        "Vulkan",
+        "OpenGL",
+        stringResource(R.string.ps2_renderer_software),
+    )
+    val resolutions = listOf(
+        stringResource(R.string.ps2_resolution_native),
+        "2× (720p)",
+        "3× (1080p)",
+        "4× (1440p)",
+        "5× (1800p)",
+        "6× (2160p)",
+        "7× (2520p)",
+        "8× (2880p)",
+    )
+    val mipmapModes = listOf(
+        stringResource(R.string.ps2_mipmap_auto),
+        stringResource(R.string.ps2_mipmap_basic),
+        stringResource(R.string.ps2_mipmap_full),
+    )
+    val halfPixelOffsets = listOf(
+        stringResource(R.string.ps2_half_pixel_offset_off),
+        stringResource(R.string.ps2_half_pixel_offset_normal),
+        stringResource(R.string.ps2_half_pixel_offset_special),
+        stringResource(R.string.ps2_half_pixel_offset_special_aggressive),
+    )
+    val texturePreloadings = listOf(
+        stringResource(R.string.ps2_texture_preloading_disabled),
+        stringResource(R.string.ps2_texture_preloading_partial),
+        stringResource(R.string.ps2_texture_preloading_full),
+    )
+    val limiterModes = listOf(
+        stringResource(R.string.ps2_limiter_normal),
+        stringResource(R.string.ps2_limiter_slow_motion),
+        stringResource(R.string.ps2_limiter_turbo),
+        stringResource(R.string.ps2_limiter_unlimited),
+    )
+    val eeCycleSkips = listOf(stringResource(R.string.ps2_ee_cycle_skip_off), "1", "2", "3")
 
     var config by remember { mutableStateOf(PS2Config.DEFAULT) }
     var showStatesView by remember { mutableStateOf(false) }
@@ -218,21 +256,21 @@ fun PS2Menu(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("金手指管理", style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.ps2_cheats_manager_title), style = MaterialTheme.typography.titleMedium)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Button(
                                 onClick = { showAddCheatDialog = true },
                                 modifier = Modifier.height(32.dp),
                                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp)
                             ) {
-                                Text("新建", style = MaterialTheme.typography.bodyMedium)
+                                Text(stringResource(R.string.ps2_new), style = MaterialTheme.typography.bodyMedium)
                             }
                             Button(
                                 onClick = { showCheatsView = false },
                                 modifier = Modifier.height(32.dp),
                                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp)
                             ) {
-                                Text("返回", style = MaterialTheme.typography.bodyMedium)
+                                Text(stringResource(R.string.ps2_back), style = MaterialTheme.typography.bodyMedium)
                             }
                         }
                     }
@@ -275,7 +313,7 @@ fun PS2Menu(
                             (context as? android.app.Activity)?.recreate()
                             onDismiss()
                         }) {
-                            Text("重新开始")
+                            Text(stringResource(R.string.ps2_restart))
                         }
                         Button(onClick = { 
                             NativeApp.onNativeSurfaceDestroyed()
@@ -283,14 +321,14 @@ fun PS2Menu(
                             (context as? android.app.Activity)?.finish()
                             onDismiss()
                         }) {
-                            Text("退出")
+                            Text(stringResource(R.string.ps2_exit))
                         }
                         Button(onClick = { showCheatsView = true }) {
-                            Text("金手指")
+                            Text(stringResource(R.string.ps2_cheats))
                         }
                         if (hasConnectedController && onOpenControllerMapping != null) {
                             Button(onClick = onOpenControllerMapping) {
-                                Text("按钮映射")
+                                Text(stringResource(R.string.controller_mapping_button))
                             }
                         }
                         Button(onClick = { showStatesView = true }) {
@@ -302,7 +340,7 @@ fun PS2Menu(
 
                 if (hasConnectedController && connectedControllerName.isNotBlank()) {
                     Text(
-                        text = "已连接手柄: $connectedControllerName",
+                        text = stringResource(R.string.ps2_connected_controller, connectedControllerName),
                         style = MaterialTheme.typography.bodySmall
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -324,7 +362,7 @@ fun PS2Menu(
 
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
-                        DropdownMenuField(stringResource(R.string.ps2_aspect_ratio), ASPECT_RATIOS, config.aspectRatio.id) {
+                        DropdownMenuField(stringResource(R.string.ps2_aspect_ratio), aspectRatios, config.aspectRatio.id) {
                             config = config.copy(aspectRatio = AspectRatio.fromId(it))
                         }
                     }
@@ -334,49 +372,49 @@ fun PS2Menu(
                         }
                     }
                     Box(modifier = Modifier.weight(1f)) {
-                        DropdownMenuField(stringResource(R.string.ps2_renderer), RENDERERS, config.renderer.menuIndex) {
+                        DropdownMenuField(stringResource(R.string.ps2_renderer), renderers, config.renderer.menuIndex) {
                             config = config.copy(renderer = GSRenderer.fromMenuIndex(it))
                         }
                     }
                 }
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
-                        DropdownMenuField(stringResource(R.string.ps2_resolution_multiplier), RESOLUTIONS, config.upscaleMultiplier - 1) {
+                        DropdownMenuField(stringResource(R.string.ps2_resolution_multiplier), resolutions, config.upscaleMultiplier - 1) {
                             config = config.copy(upscaleMultiplier = it + 1)
                         }
                     }
                     Box(modifier = Modifier.weight(1f)) {
-                        DropdownMenuField(stringResource(R.string.ps2_mipmap_mode), MIPMAP_MODES, config.mipmapMode.id) {
+                        DropdownMenuField(stringResource(R.string.ps2_mipmap_mode), mipmapModes, config.mipmapMode.id) {
                             config = config.copy(mipmapMode = MipmapMode.fromId(it))
                         }
                     }
                     Box(modifier = Modifier.weight(1f)) {
-                        DropdownMenuField(stringResource(R.string.ps2_half_pixel_offset), HALF_PIXEL_OFFSETS, config.halfPixelOffset.id) {
+                        DropdownMenuField(stringResource(R.string.ps2_half_pixel_offset), halfPixelOffsets, config.halfPixelOffset.id) {
                             config = config.copy(halfPixelOffset = HalfPixelOffset.fromId(it))
                         }
                     }
                 }
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
-                        DropdownMenuField(stringResource(R.string.ps2_texture_preloading), TEXTURE_PRELOADINGS, config.texturePreloading.id) {
+                        DropdownMenuField(stringResource(R.string.ps2_texture_preloading), texturePreloadings, config.texturePreloading.id) {
                             config = config.copy(texturePreloading = TexturePreloading.fromId(it))
                         }
                     }
                 }
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(modifier = Modifier.weight(1f)) {
-                        DropdownMenuField(stringResource(R.string.ps2_limiter_mode), LIMITER_MODES, config.limiterMode.id) {
+                        DropdownMenuField(stringResource(R.string.ps2_limiter_mode), limiterModes, config.limiterMode.id) {
                             config = config.copy(limiterMode = LimiterMode.fromId(it))
                         }
                     }
                     Box(modifier = Modifier.weight(1f)) {
                         val currentSpeedIndex = RUNNING_SPEED_VALUES.indexOfFirst { kotlin.math.abs(it - config.nominalScalar) < 0.01f }.takeIf { it >= 0 } ?: 1
-                        DropdownMenuField("运行速度", RUNNING_SPEEDS, currentSpeedIndex) {
+                        DropdownMenuField(stringResource(R.string.ps2_run_speed), RUNNING_SPEEDS, currentSpeedIndex) {
                             config = config.copy(nominalScalar = RUNNING_SPEED_VALUES[it])
                         }
                     }
                     Box(modifier = Modifier.weight(1f)) {
-                        DropdownMenuField(stringResource(R.string.ps2_ee_cycle_skip), EE_CYCLE_SKIPS, config.eeCycleSkip) {
+                        DropdownMenuField(stringResource(R.string.ps2_ee_cycle_skip), eeCycleSkips, config.eeCycleSkip) {
                             config = config.copy(eeCycleSkip = it)
                         }
                     }

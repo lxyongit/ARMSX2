@@ -37,9 +37,12 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import kr.co.iefriends.pcsx2.R
 
 @Composable
 fun PS2GamepadMappingDialog(
@@ -52,6 +55,7 @@ fun PS2GamepadMappingDialog(
     onDialogKeyEvent: (android.view.KeyEvent) -> Boolean,
 ) {
     val editingDevice = uiState.editingDevice ?: return
+    val context = LocalContext.current
     var showTips by remember(editingDevice.deviceKey) { mutableStateOf(false) }
     val dialogFocusRequester = remember(editingDevice.deviceKey) { FocusRequester() }
 
@@ -86,7 +90,7 @@ fun PS2GamepadMappingDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text("手柄映射", style = MaterialTheme.typography.titleLarge)
+                        Text(stringResource(R.string.controller_mapping_title), style = MaterialTheme.typography.titleLarge)
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(editingDevice.name, style = MaterialTheme.typography.bodySmall)
                     }
@@ -94,15 +98,15 @@ fun PS2GamepadMappingDialog(
                         onClick = { showTips = !showTips },
                         modifier = Modifier.focusProperties { canFocus = false }
                     ) {
-                        Text(if (showTips) "收起说明" else "说明")
+                        Text(stringResource(if (showTips) R.string.controller_mapping_hide_tips else R.string.controller_mapping_show_tips))
                     }
                 }
                 Spacer(modifier = Modifier.height(6.dp))
 
                 val hint = if (uiState.mappingDialogAutoPrompt) {
-                    "检测到新手柄，请先保存推荐布局或逐项绑定。"
+                    stringResource(R.string.controller_mapping_auto_prompt)
                 } else {
-                    "点击卡片开始绑定，每行显示 3 个按键配置。"
+                    stringResource(R.string.controller_mapping_instruction)
                 }
                 Text(hint, style = MaterialTheme.typography.bodySmall)
                 Spacer(modifier = Modifier.height(6.dp))
@@ -118,11 +122,11 @@ fun PS2GamepadMappingDialog(
                             .padding(10.dp)
                     ) {
                         Column {
-                            Text("摇杆与扳机", style = MaterialTheme.typography.titleSmall)
+                            Text(stringResource(R.string.controller_mapping_sticks_triggers), style = MaterialTheme.typography.titleSmall)
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(PS2GamepadManager.AXIS_SUMMARY, style = MaterialTheme.typography.bodySmall)
+                            Text(PS2GamepadManager.axisSummary(context), style = MaterialTheme.typography.bodySmall)
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text("菜单键也支持映射，按下后会直接呼出游戏菜单。", style = MaterialTheme.typography.bodySmall)
+                            Text(stringResource(R.string.controller_mapping_menu_hint), style = MaterialTheme.typography.bodySmall)
                         }
                     }
                     Spacer(modifier = Modifier.height(8.dp))
@@ -139,7 +143,7 @@ fun PS2GamepadMappingDialog(
                             .padding(horizontal = 12.dp, vertical = 8.dp)
                     ) {
                         Text(
-                            "正在等待按键: ${uiState.capturingAction.title}",
+                            stringResource(R.string.controller_mapping_waiting_for, uiState.capturingAction.title(context)),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
@@ -159,7 +163,9 @@ fun PS2GamepadMappingDialog(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             actionRow.forEach { action ->
-                                val bindingLabel = uiState.editingBindings[action]?.let(PS2GamepadManager::keyCodeLabel) ?: "未绑定"
+                                val bindingLabel = uiState.editingBindings[action]?.let { keyCode ->
+                                    PS2GamepadManager.keyCodeLabel(context, keyCode)
+                                } ?: stringResource(R.string.controller_mapping_unbound)
                                 val isCapturing = uiState.capturingAction == action
                                 Surface(
                                     shape = RoundedCornerShape(14.dp),
@@ -181,12 +187,12 @@ fun PS2GamepadMappingDialog(
                                         verticalArrangement = Arrangement.spacedBy(4.dp)
                                     ) {
                                         Text(
-                                            text = "${action.title} / ${action.englishTitle}",
+                                            text = action.title(context),
                                             style = MaterialTheme.typography.labelMedium,
                                             maxLines = 1,
                                         )
                                         Text(
-                                            text = if (isCapturing) "等待输入" else bindingLabel,
+                                            text = if (isCapturing) stringResource(R.string.controller_mapping_waiting) else bindingLabel,
                                             style = MaterialTheme.typography.bodySmall,
                                             color = if (isCapturing) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
                                             maxLines = 1,
@@ -204,7 +210,7 @@ fun PS2GamepadMappingDialog(
                                                     .focusProperties { canFocus = false },
                                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
                                             ) {
-                                                Text("绑定", style = MaterialTheme.typography.labelSmall)
+                                                Text(stringResource(R.string.controller_mapping_rebind), style = MaterialTheme.typography.labelSmall)
                                             }
                                             TextButton(
                                                 onClick = { onClearBinding(action) },
@@ -214,7 +220,7 @@ fun PS2GamepadMappingDialog(
                                                     .sizeIn(minHeight = 32.dp)
                                                     .focusProperties { canFocus = false }
                                             ) {
-                                                Text("清除", style = MaterialTheme.typography.labelSmall)
+                                                Text(stringResource(R.string.controller_mapping_clear), style = MaterialTheme.typography.labelSmall)
                                             }
                                         }
                                     }
@@ -238,21 +244,21 @@ fun PS2GamepadMappingDialog(
                         onClick = onRestoreSuggested,
                         modifier = Modifier.focusProperties { canFocus = false }
                     ) {
-                        Text("恢复推荐")
+                        Text(stringResource(R.string.controller_mapping_reset))
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     TextButton(
                         onClick = onDismiss,
                         modifier = Modifier.focusProperties { canFocus = false }
                     ) {
-                        Text("关闭")
+                        Text(stringResource(R.string.ps2_close))
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
                         onClick = onSave,
                         modifier = Modifier.focusProperties { canFocus = false }
                     ) {
-                        Text("保存")
+                        Text(stringResource(R.string.ps2_save))
                     }
                 }
             }

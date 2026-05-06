@@ -45,7 +45,7 @@ class GameMenuCheatsViewModel(
     val isAddCheatSupported: Boolean = systemId != "fbneo"
 
     init {
-        val customCheatsFromStorage = loadCustomCheats()
+        val customCheatsFromStorage = loadCustomCheats().map(::normalizeCustomCheat)
         
         // Split initial cheats
         val initialCustomCheats = initialCheats.filter { it.isCustom }
@@ -80,8 +80,8 @@ class GameMenuCheatsViewModel(
 
         if (isMultiOption) {
             val options = mutableListOf<CheatOption>()
-            // Add default "Close" option
-            options.add(CheatOption("关闭", ""))
+            // Keep the persisted value language-neutral and localize it in the UI.
+            options.add(CheatOption("", ""))
             
             lines.forEach { line ->
                 val parts = line.split("=", limit = 2)
@@ -157,6 +157,22 @@ class GameMenuCheatsViewModel(
             e.printStackTrace()
             emptyList()
         }
+    }
+
+    private fun normalizeCustomCheat(cheat: Cheat): Cheat {
+        if (!cheat.isCustom || cheat.options.isEmpty()) {
+            return cheat
+        }
+
+        return cheat.copy(
+            options = cheat.options.map { option ->
+                if (option.code.isBlank()) {
+                    option.copy(name = "")
+                } else {
+                    option
+                }
+            }
+        )
     }
 
     fun toggleCheat(index: Int, enabled: Boolean) {

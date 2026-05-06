@@ -7,7 +7,9 @@ import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.widget.Toast
+import androidx.annotation.StringRes
 import kr.co.iefriends.pcsx2.NativeApp
+import kr.co.iefriends.pcsx2.R
 import kr.co.iefriends.pcsx2.input.InputDeviceRoutingManager
 import kr.co.iefriends.pcsx2.input.RemoteGamepadInputPacket
 import kr.co.iefriends.pcsx2.input.RemoteInputReceiver
@@ -26,28 +28,30 @@ private const val ANALOG_DEADZONE = 0.18f
 private const val TRIGGER_DEADZONE = 0.08f
 private const val HAT_THRESHOLD = 0.45f
 
-enum class PS2GamepadAction(val title: String, val englishTitle: String, val nativeCode: Int?) {
-    DPAD_UP("方向上", "DPad Up", KeyEvent.KEYCODE_DPAD_UP),
-    DPAD_DOWN("方向下", "DPad Down", KeyEvent.KEYCODE_DPAD_DOWN),
-    DPAD_LEFT("方向左", "DPad Left", KeyEvent.KEYCODE_DPAD_LEFT),
-    DPAD_RIGHT("方向右", "DPad Right", KeyEvent.KEYCODE_DPAD_RIGHT),
-    CROSS("叉", "Cross", KeyEvent.KEYCODE_BUTTON_A),
-    CIRCLE("圈", "Circle", KeyEvent.KEYCODE_BUTTON_B),
-    SQUARE("方块", "Square", KeyEvent.KEYCODE_BUTTON_X),
-    TRIANGLE("三角", "Triangle", KeyEvent.KEYCODE_BUTTON_Y),
-    SELECT("选择", "Select", KeyEvent.KEYCODE_BUTTON_SELECT),
-    START("开始", "Start", KeyEvent.KEYCODE_BUTTON_START),
-    L1("左肩键1", "L1", KeyEvent.KEYCODE_BUTTON_L1),
-    R1("右肩键1", "R1", KeyEvent.KEYCODE_BUTTON_R1),
-    L2("左扳机", "L2", KeyEvent.KEYCODE_BUTTON_L2),
-    R2("右扳机", "R2", KeyEvent.KEYCODE_BUTTON_R2),
-    L3("左摇杆按下", "L3", KeyEvent.KEYCODE_BUTTON_THUMBL),
-    R3("右摇杆按下", "R3", KeyEvent.KEYCODE_BUTTON_THUMBR),
-    MENU("菜单", "Menu", null);
+enum class PS2GamepadAction(@StringRes val titleResId: Int, val nativeCode: Int?) {
+    DPAD_UP(R.string.controller_action_dpad_up, KeyEvent.KEYCODE_DPAD_UP),
+    DPAD_DOWN(R.string.controller_action_dpad_down, KeyEvent.KEYCODE_DPAD_DOWN),
+    DPAD_LEFT(R.string.controller_action_dpad_left, KeyEvent.KEYCODE_DPAD_LEFT),
+    DPAD_RIGHT(R.string.controller_action_dpad_right, KeyEvent.KEYCODE_DPAD_RIGHT),
+    CROSS(R.string.controller_action_cross, KeyEvent.KEYCODE_BUTTON_A),
+    CIRCLE(R.string.controller_action_circle, KeyEvent.KEYCODE_BUTTON_B),
+    SQUARE(R.string.controller_action_square, KeyEvent.KEYCODE_BUTTON_X),
+    TRIANGLE(R.string.controller_action_triangle, KeyEvent.KEYCODE_BUTTON_Y),
+    SELECT(R.string.controller_action_select, KeyEvent.KEYCODE_BUTTON_SELECT),
+    START(R.string.controller_action_start, KeyEvent.KEYCODE_BUTTON_START),
+    L1(R.string.controller_action_l1, KeyEvent.KEYCODE_BUTTON_L1),
+    R1(R.string.controller_action_r1, KeyEvent.KEYCODE_BUTTON_R1),
+    L2(R.string.controller_action_l2, KeyEvent.KEYCODE_BUTTON_L2),
+    R2(R.string.controller_action_r2, KeyEvent.KEYCODE_BUTTON_R2),
+    L3(R.string.controller_action_l3, KeyEvent.KEYCODE_BUTTON_THUMBL),
+    R3(R.string.controller_action_r3, KeyEvent.KEYCODE_BUTTON_THUMBR),
+    MENU(R.string.controller_action_menu, null);
 
     companion object {
         val remappableActions: List<PS2GamepadAction> = values().toList()
     }
+
+    fun title(context: Context): String = context.getString(titleResId)
 }
 
 data class PS2GamepadDevice(
@@ -201,7 +205,11 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
         preferences.edit()
             .putString(mappingPreferenceKey(editingDevice.deviceKey), json.toString())
             .apply()
-        Toast.makeText(appContext, "已保存 ${editingDevice.name} 的手柄映射", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            appContext,
+            appContext.getString(R.string.controller_mapping_saved, editingDevice.name),
+            Toast.LENGTH_SHORT,
+        ).show()
         dismissMappingDialog()
     }
 
@@ -330,7 +338,11 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
         releaseAllInputs()
         if (removedDevice != null) {
             notifiedDeviceKeys.remove(removedDevice.deviceKey)
-            Toast.makeText(appContext, "手柄已断开: ${removedDevice.name}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                appContext,
+                appContext.getString(R.string.controller_disconnected, removedDevice.name),
+                Toast.LENGTH_SHORT,
+            ).show()
         }
         if (removedEditingDevice) {
             dismissMappingDialog()
@@ -383,7 +395,11 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
             return
         }
         _state.value = _state.value.copy(activeControllerId = device.id)
-        Toast.makeText(appContext, "已连接手柄: ${device.name}，可在菜单中修改映射", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            appContext,
+            appContext.getString(R.string.controller_connected_hint, device.name),
+            Toast.LENGTH_SHORT,
+        ).show()
     }
 
     private fun markActiveController(deviceId: Int) {
@@ -653,9 +669,9 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
     }
 
     companion object {
-        const val AXIS_SUMMARY = "左摇杆使用 X/Y，右摇杆优先使用 RX/RY，若手柄不支持则回退到 Z/RZ。L2/R2 自动读取扳机轴。"
+        fun axisSummary(context: Context): String = context.getString(R.string.controller_mapping_axis_summary)
 
-        fun keyCodeLabel(keyCode: Int): String {
+        fun keyCodeLabel(context: Context, keyCode: Int): String {
             return when (keyCode) {
                 KeyEvent.KEYCODE_BUTTON_A -> "A"
                 KeyEvent.KEYCODE_BUTTON_B -> "B"
@@ -665,15 +681,15 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
                 KeyEvent.KEYCODE_BUTTON_R1 -> "R1"
                 KeyEvent.KEYCODE_BUTTON_L2 -> "L2"
                 KeyEvent.KEYCODE_BUTTON_R2 -> "R2"
-                KeyEvent.KEYCODE_BUTTON_SELECT -> "Select"
-                KeyEvent.KEYCODE_BUTTON_START -> "Start"
+                KeyEvent.KEYCODE_BUTTON_SELECT -> context.getString(R.string.controller_action_select)
+                KeyEvent.KEYCODE_BUTTON_START -> context.getString(R.string.controller_action_start)
                 KeyEvent.KEYCODE_BUTTON_THUMBL -> "L3"
                 KeyEvent.KEYCODE_BUTTON_THUMBR -> "R3"
-                KeyEvent.KEYCODE_BUTTON_MODE -> "Mode"
-                KeyEvent.KEYCODE_DPAD_UP -> "DPad Up"
-                KeyEvent.KEYCODE_DPAD_DOWN -> "DPad Down"
-                KeyEvent.KEYCODE_DPAD_LEFT -> "DPad Left"
-                KeyEvent.KEYCODE_DPAD_RIGHT -> "DPad Right"
+                KeyEvent.KEYCODE_BUTTON_MODE -> context.getString(R.string.controller_key_mode)
+                KeyEvent.KEYCODE_DPAD_UP -> context.getString(R.string.controller_action_dpad_up)
+                KeyEvent.KEYCODE_DPAD_DOWN -> context.getString(R.string.controller_action_dpad_down)
+                KeyEvent.KEYCODE_DPAD_LEFT -> context.getString(R.string.controller_action_dpad_left)
+                KeyEvent.KEYCODE_DPAD_RIGHT -> context.getString(R.string.controller_action_dpad_right)
                 else -> KeyEvent.keyCodeToString(keyCode)
                     .removePrefix("KEYCODE_")
                     .replace('_', ' ')

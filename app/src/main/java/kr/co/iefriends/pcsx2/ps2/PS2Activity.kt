@@ -19,6 +19,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import kr.co.iefriends.pcsx2.NativeApp
+import kr.co.iefriends.pcsx2.R
 import kr.co.iefriends.pcsx2.input.RemoteGamepadInputPacket
 import kr.co.iefriends.pcsx2.input.RemoteInputReceiver
 import android.util.Log
@@ -50,7 +51,7 @@ class PS2Activity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-            Toast.makeText(this, "需要所有文件访问权限才能加载PS2游戏", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.ps2_storage_permission_required), Toast.LENGTH_LONG).show()
             try {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                 intent.data = Uri.parse("package:$packageName")
@@ -91,7 +92,7 @@ class PS2Activity : ComponentActivity() {
             )
         }
         
-        // 调用隐藏状态栏需要放在 setContent 之后，确保 DecorView 已经初始化完成
+        // Hide the system bars after compose content is attached so DecorView is ready.
         hideStatusBar()
     }
 
