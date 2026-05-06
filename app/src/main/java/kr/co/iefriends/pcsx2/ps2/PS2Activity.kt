@@ -19,9 +19,31 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import kr.co.iefriends.pcsx2.NativeApp
+import kr.co.iefriends.pcsx2.input.RemoteGamepadInputPacket
+import kr.co.iefriends.pcsx2.input.RemoteInputReceiver
 import android.util.Log
+import java.lang.ref.WeakReference
 
 class PS2Activity : ComponentActivity() {
+    companion object {
+        private var remoteInputReceiverRef = WeakReference<RemoteInputReceiver>(null)
+
+        @JvmStatic
+        fun dispatchRemoteInputJson(rawJson: String): Boolean {
+            return remoteInputReceiverRef.get()?.receiveJson(rawJson) == true
+        }
+
+        @JvmStatic
+        fun dispatchRemoteInputPacket(packet: RemoteGamepadInputPacket): Boolean {
+            return remoteInputReceiverRef.get()?.receivePacket(packet) == true
+        }
+
+        @JvmStatic
+        fun getActiveRemoteInputReceiver(): RemoteInputReceiver? {
+            return remoteInputReceiverRef.get()
+        }
+    }
+
     private var gamepadManager: PS2GamepadManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +68,7 @@ class PS2Activity : ComponentActivity() {
         val cheatsPath = intent.getStringExtra("cheatsPath") ?: ""
         val manager = PS2GamepadManager(this).also { it.start() }
         gamepadManager = manager
+        remoteInputReceiverRef = WeakReference(manager.getRemoteInputReceiver())
         
         Log.d("cheats PS2Activity", "Received intent extras - biosFolder: $biosFolder, ps2BaseFolder: $ps2BaseFolder, gameFile: $gameFile, cheatsPath: $cheatsPath")
         val bundle = intent.extras
@@ -108,12 +131,22 @@ class PS2Activity : ComponentActivity() {
         return super.dispatchGenericMotionEvent(event)
     }
 
+    override fun onStart() {
+        super.onStart()
+        gamepadManager?.setRemoteInputEnabled(true)
+    }
+
     override fun onStop() {
+        gamepadManager?.setRemoteInputEnabled(false)
         gamepadManager?.releaseAllInputs()
         super.onStop()
     }
 
     override fun onDestroy() {
+        val currentReceiver = gamepadManager?.getRemoteInputReceiver()
+        if (remoteInputReceiverRef.get() === currentReceiver) {
+            remoteInputReceiverRef = WeakReference(null)
+        }
         gamepadManager?.stop()
         gamepadManager = null
         super.onDestroy()

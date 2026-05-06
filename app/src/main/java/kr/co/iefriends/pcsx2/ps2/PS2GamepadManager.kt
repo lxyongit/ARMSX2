@@ -8,10 +8,14 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.widget.Toast
 import kr.co.iefriends.pcsx2.NativeApp
+import kr.co.iefriends.pcsx2.input.InputDeviceRoutingManager
+import kr.co.iefriends.pcsx2.input.RemoteGamepadInputPacket
+import kr.co.iefriends.pcsx2.input.RemoteInputReceiver
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.json.JSONException
 import org.json.JSONObject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -79,6 +83,8 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
     private val notifiedDeviceKeys = mutableSetOf<String>()
     private val analogStates = mutableMapOf<Int, Int>()
     private val digitalStates = mutableMapOf<Int, Boolean>()
+    private val remoteInputReceiver = RemoteInputReceiver()
+    private val remotePacketHandler = RemoteInputReceiver.PacketHandler { packet -> applyRemoteInputPacket(packet) }
     private val defaultBindings = linkedMapOf(
         PS2GamepadAction.DPAD_UP to KeyEvent.KEYCODE_DPAD_UP,
         PS2GamepadAction.DPAD_DOWN to KeyEvent.KEYCODE_DPAD_DOWN,
@@ -102,14 +108,25 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
     private val _events = MutableSharedFlow<PS2GamepadEvent>(extraBufferCapacity = 8)
     private var started = false
 
+    init {
+        InputDeviceRoutingManager.init(appContext)
+    }
+
     val state = _state.asStateFlow()
     val events = _events.asSharedFlow()
+
+    fun getRemoteInputReceiver(): RemoteInputReceiver = remoteInputReceiver
+
+    fun setRemoteInputEnabled(enabled: Boolean) {
+        remoteInputReceiver.setPacketHandler(if (enabled) remotePacketHandler else null)
+    }
 
     fun start() {
         if (started) {
             return
         }
         started = true
+        setRemoteInputEnabled(true)
         inputManager.registerInputDeviceListener(this, null)
         refreshConnectedControllers()
         _state.value.activeController?.let { maybeShowConnectionHint(it) }
@@ -120,6 +137,7 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
             return
         }
         started = false
+        setRemoteInputEnabled(false)
         inputManager.unregisterInputDeviceListener(this)
         releaseAllInputs()
     }
@@ -229,7 +247,7 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
         }
 
         val nativeCode = action.nativeCode ?: return true
-        NativeApp.setPadButton(nativeCode, 0, event.action == KeyEvent.ACTION_DOWN)
+        NativeApp.setPadButtonForController(resolveControllerIndex(event.device), nativeCode, 0, event.action == KeyEvent.ACTION_DOWN)
         return true
     }
 
@@ -245,10 +263,53 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
             return true
         }
 
-        handleLeftStick(event)
-        handleRightStick(event)
-        handleTriggers(event)
-        handleHat(event)
+        val controllerIndex = resolveControllerIndex(event.device)
+        handleLeftStick(event, controllerIndex)
+        handleRightStick(event, controllerIndex)
+        handleTriggers(event, controllerIndex)
+        handleHat(event, controllerIndex)
+        return true
+    }
+
+    fun applyRemoteInputJson(rawJson: String): Boolean {
+        return try {
+            applyRemoteInputPacket(RemoteGamepadInputPacket.fromJson(rawJson))
+        } catch (_: JSONException) {
+            false
+        }
+    }
+
+    fun applyRemoteInputPacket(packet: RemoteGamepadInputPacket): Boolean {
+        if (!packet.hasEvents()) {
+            return false
+        }
+
+        val controllerIndex = resolveRemoteControllerIndex(packet)
+        packet.events.forEach { event ->
+            when (event.type) {
+                RemoteGamepadInputPacket.EventType.BUTTON -> applyRemoteButtonEvent(
+                    controllerIndex,
+                    event as RemoteGamepadInputPacket.ButtonEvent,
+                )
+
+                RemoteGamepadInputPacket.EventType.STICK -> applyRemoteStickEvent(
+                    controllerIndex,
+                    event as RemoteGamepadInputPacket.StickEvent,
+                )
+
+                RemoteGamepadInputPacket.EventType.TRIGGER -> applyRemoteTriggerEvent(
+                    controllerIndex,
+                    event as RemoteGamepadInputPacket.TriggerEvent,
+                )
+
+                RemoteGamepadInputPacket.EventType.HAT -> applyRemoteHatEvent(
+                    controllerIndex,
+                    event as RemoteGamepadInputPacket.HatEvent,
+                )
+
+                RemoteGamepadInputPacket.EventType.RESET -> resetControllerInputs(controllerIndex)
+            }
+        }
         return true
     }
 
@@ -349,29 +410,29 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
         )
     }
 
-    private fun handleLeftStick(event: MotionEvent) {
+    private fun handleLeftStick(event: MotionEvent, controllerIndex: Int) {
         val xAxis = getCenteredAxis(event, MotionEvent.AXIS_X)
         val yAxis = getCenteredAxis(event, MotionEvent.AXIS_Y)
-        sendAnalog(111, xAxis)
-        sendAnalog(113, -xAxis)
-        sendAnalog(112, yAxis)
-        sendAnalog(110, -yAxis)
+        sendAnalog(controllerIndex, 111, xAxis)
+        sendAnalog(controllerIndex, 113, -xAxis)
+        sendAnalog(controllerIndex, 112, yAxis)
+        sendAnalog(controllerIndex, 110, -yAxis)
     }
 
-    private fun handleRightStick(event: MotionEvent) {
+    private fun handleRightStick(event: MotionEvent, controllerIndex: Int) {
         var xAxis = getCenteredAxis(event, MotionEvent.AXIS_RX)
         var yAxis = getCenteredAxis(event, MotionEvent.AXIS_RY)
         if (xAxis == 0f && yAxis == 0f) {
             xAxis = getCenteredAxis(event, MotionEvent.AXIS_Z)
             yAxis = getCenteredAxis(event, MotionEvent.AXIS_RZ)
         }
-        sendAnalog(121, xAxis)
-        sendAnalog(123, -xAxis)
-        sendAnalog(122, yAxis)
-        sendAnalog(120, -yAxis)
+        sendAnalog(controllerIndex, 121, xAxis)
+        sendAnalog(controllerIndex, 123, -xAxis)
+        sendAnalog(controllerIndex, 122, yAxis)
+        sendAnalog(controllerIndex, 120, -yAxis)
     }
 
-    private fun handleTriggers(event: MotionEvent) {
+    private fun handleTriggers(event: MotionEvent, controllerIndex: Int) {
         var leftTrigger = event.getAxisValue(MotionEvent.AXIS_LTRIGGER)
         var rightTrigger = event.getAxisValue(MotionEvent.AXIS_RTRIGGER)
         if (leftTrigger == 0f) {
@@ -380,38 +441,117 @@ class PS2GamepadManager(context: Context) : InputManager.InputDeviceListener {
         if (rightTrigger == 0f) {
             rightTrigger = event.getAxisValue(MotionEvent.AXIS_GAS)
         }
-        sendAnalog(KeyEvent.KEYCODE_BUTTON_L2, normalizeTrigger(leftTrigger), TRIGGER_DEADZONE)
-        sendAnalog(KeyEvent.KEYCODE_BUTTON_R2, normalizeTrigger(rightTrigger), TRIGGER_DEADZONE)
+        sendAnalog(controllerIndex, KeyEvent.KEYCODE_BUTTON_L2, normalizeTrigger(leftTrigger), TRIGGER_DEADZONE)
+        sendAnalog(controllerIndex, KeyEvent.KEYCODE_BUTTON_R2, normalizeTrigger(rightTrigger), TRIGGER_DEADZONE)
     }
 
-    private fun handleHat(event: MotionEvent) {
+    private fun handleHat(event: MotionEvent, controllerIndex: Int) {
         val hatX = event.getAxisValue(MotionEvent.AXIS_HAT_X)
         val hatY = event.getAxisValue(MotionEvent.AXIS_HAT_Y)
-        setDigitalState(KeyEvent.KEYCODE_DPAD_LEFT, hatX < -HAT_THRESHOLD)
-        setDigitalState(KeyEvent.KEYCODE_DPAD_RIGHT, hatX > HAT_THRESHOLD)
-        setDigitalState(KeyEvent.KEYCODE_DPAD_UP, hatY < -HAT_THRESHOLD)
-        setDigitalState(KeyEvent.KEYCODE_DPAD_DOWN, hatY > HAT_THRESHOLD)
+        setDigitalState(controllerIndex, KeyEvent.KEYCODE_DPAD_LEFT, hatX < -HAT_THRESHOLD)
+        setDigitalState(controllerIndex, KeyEvent.KEYCODE_DPAD_RIGHT, hatX > HAT_THRESHOLD)
+        setDigitalState(controllerIndex, KeyEvent.KEYCODE_DPAD_UP, hatY < -HAT_THRESHOLD)
+        setDigitalState(controllerIndex, KeyEvent.KEYCODE_DPAD_DOWN, hatY > HAT_THRESHOLD)
     }
 
-    private fun setDigitalState(nativeCode: Int, pressed: Boolean) {
-        val previous = digitalStates[nativeCode]
+    private fun setDigitalState(controllerIndex: Int, nativeCode: Int, pressed: Boolean) {
+        val stateKey = buildStateKey(controllerIndex, nativeCode)
+        val previous = digitalStates[stateKey]
         if (previous == pressed) {
             return
         }
-        digitalStates[nativeCode] = pressed
-        NativeApp.setPadButton(nativeCode, 0, pressed)
+        digitalStates[stateKey] = pressed
+        NativeApp.setPadButtonForController(controllerIndex, nativeCode, 0, pressed)
     }
 
-    private fun sendAnalog(nativeCode: Int, signedValue: Float, deadzone: Float = ANALOG_DEADZONE) {
+    private fun sendAnalog(controllerIndex: Int, nativeCode: Int, signedValue: Float, deadzone: Float = ANALOG_DEADZONE) {
         val normalized = signedValue.coerceIn(0f, 1f)
         val filtered = if (normalized < deadzone || normalized.isNaN()) 0f else normalized
         val scaledValue = (filtered * 255f).roundToInt().coerceIn(0, 255)
-        val previousValue = analogStates[nativeCode]
+        val stateKey = buildStateKey(controllerIndex, nativeCode)
+        val previousValue = analogStates[stateKey]
         if (previousValue == scaledValue) {
             return
         }
-        analogStates[nativeCode] = scaledValue
-        NativeApp.setPadButton(nativeCode, scaledValue, scaledValue > 0)
+        analogStates[stateKey] = scaledValue
+        NativeApp.setPadButtonForController(controllerIndex, nativeCode, scaledValue, scaledValue > 0)
+    }
+
+    private fun applyRemoteButtonEvent(controllerIndex: Int, event: RemoteGamepadInputPacket.ButtonEvent) {
+        NativeApp.setPadButtonForController(controllerIndex, event.code, event.value, event.pressed)
+    }
+
+    private fun applyRemoteStickEvent(controllerIndex: Int, event: RemoteGamepadInputPacket.StickEvent) {
+        when (event.stick) {
+            RemoteGamepadInputPacket.StickTarget.LEFT -> {
+                sendAnalog(controllerIndex, 111, event.x)
+                sendAnalog(controllerIndex, 113, -event.x)
+                sendAnalog(controllerIndex, 112, event.y)
+                sendAnalog(controllerIndex, 110, -event.y)
+            }
+
+            RemoteGamepadInputPacket.StickTarget.RIGHT -> {
+                sendAnalog(controllerIndex, 121, event.x)
+                sendAnalog(controllerIndex, 123, -event.x)
+                sendAnalog(controllerIndex, 122, event.y)
+                sendAnalog(controllerIndex, 120, -event.y)
+            }
+        }
+    }
+
+    private fun applyRemoteTriggerEvent(controllerIndex: Int, event: RemoteGamepadInputPacket.TriggerEvent) {
+        val nativeCode = when (event.trigger) {
+            RemoteGamepadInputPacket.TriggerTarget.L2 -> KeyEvent.KEYCODE_BUTTON_L2
+            RemoteGamepadInputPacket.TriggerTarget.R2 -> KeyEvent.KEYCODE_BUTTON_R2
+        }
+        sendAnalog(controllerIndex, nativeCode, event.value, TRIGGER_DEADZONE)
+    }
+
+    private fun applyRemoteHatEvent(controllerIndex: Int, event: RemoteGamepadInputPacket.HatEvent) {
+        setDigitalState(controllerIndex, KeyEvent.KEYCODE_DPAD_LEFT, event.x < 0)
+        setDigitalState(controllerIndex, KeyEvent.KEYCODE_DPAD_RIGHT, event.x > 0)
+        setDigitalState(controllerIndex, KeyEvent.KEYCODE_DPAD_UP, event.y < 0)
+        setDigitalState(controllerIndex, KeyEvent.KEYCODE_DPAD_DOWN, event.y > 0)
+    }
+
+    private fun resetControllerInputs(controllerIndex: Int) {
+        val analogIterator = analogStates.entries.iterator()
+        while (analogIterator.hasNext()) {
+            if ((analogIterator.next().key ushr 16) == controllerIndex) {
+                analogIterator.remove()
+            }
+        }
+
+        val digitalIterator = digitalStates.entries.iterator()
+        while (digitalIterator.hasNext()) {
+            if ((digitalIterator.next().key ushr 16) == controllerIndex) {
+                digitalIterator.remove()
+            }
+        }
+
+        NativeApp.resetKeyStatusForController(controllerIndex)
+    }
+
+    private fun resolveControllerIndex(device: InputDevice?): Int {
+        return InputDeviceRoutingManager.getAssignedPadIndex(device)
+    }
+
+    private fun resolveRemoteControllerIndex(packet: RemoteGamepadInputPacket): Int {
+        val maxIndex = (InputDeviceRoutingManager.getPadCount() - 1).coerceAtLeast(0)
+        if (packet.controllerIndex >= 0) {
+            return packet.controllerIndex.coerceIn(0, maxIndex)
+        }
+
+        val routingKey = packet.routingKey
+        return if (routingKey.isNullOrBlank()) {
+            0
+        } else {
+            InputDeviceRoutingManager.getAssignedPadIndex(routingKey)
+        }
+    }
+
+    private fun buildStateKey(controllerIndex: Int, nativeCode: Int): Int {
+        return (controllerIndex shl 16) or (nativeCode and 0xffff)
     }
 
     private fun getCenteredAxis(event: MotionEvent, axis: Int): Float {

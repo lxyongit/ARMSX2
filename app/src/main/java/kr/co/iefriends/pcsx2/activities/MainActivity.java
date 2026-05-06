@@ -111,6 +111,7 @@ import kr.co.iefriends.pcsx2.R;
 import kr.co.iefriends.pcsx2.hid.HIDDeviceManager;
 import kr.co.iefriends.pcsx2.input.ControllerMappingDialog;
 import kr.co.iefriends.pcsx2.input.ControllerMappingManager;
+import kr.co.iefriends.pcsx2.input.InputDeviceRoutingManager;
 import kr.co.iefriends.pcsx2.input.view.DPadView;
 import kr.co.iefriends.pcsx2.input.view.JoystickView;
 import kr.co.iefriends.pcsx2.input.view.PSButtonView;
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int RUMBLE_DURATION_MS = 160;
     private static volatile int sLastControllerDeviceId = -1;
+    private static final SparseIntArray sLastControllerDeviceIdByPad = new SparseIntArray();
     private static volatile boolean sVibrationEnabled = true;
     private static WeakReference<MainActivity> sInstanceRef = new WeakReference<>(null);
 
@@ -221,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
     private static final float ANALOG_DEADZONE = 0.08f;
     private static final float TRIGGER_DEADZONE = 0.04f;
     private final SparseIntArray analogStates = new SparseIntArray();
-    private boolean hatUp, hatDown, hatLeft, hatRight;
+    private final Set<Integer> hatStates = new HashSet<>();
     private boolean disableTouchControls;
 
     public static final String EXTRA_SETTINGS_LAYOUT_CHANGED = "SET_LAYOUT_CHANGED";
@@ -413,6 +415,7 @@ public class MainActivity extends AppCompatActivity {
     Initialize();
 
     ControllerMappingManager.init(this);
+    InputDeviceRoutingManager.init(this);
     refreshVibrationPreference();
 
     // Load on-screen controls hide timeout
@@ -3307,10 +3310,10 @@ public class MainActivity extends AppCompatActivity {
             joystickLeft.setOnJoystickMoveListener((x, y) -> {
                 float clampedX = Math.max(-1f, Math.min(1f, x));
                 float clampedY = Math.max(-1f, Math.min(1f, y));
-                sendAnalog(111, Math.max(0f, clampedX));
-                sendAnalog(113, Math.max(0f, -clampedX));
-                sendAnalog(112, Math.max(0f, clampedY));
-                sendAnalog(110, Math.max(0f, -clampedY));
+                sendAnalog(0, 111, Math.max(0f, clampedX));
+                sendAnalog(0, 113, Math.max(0f, -clampedX));
+                sendAnalog(0, 112, Math.max(0f, clampedY));
+                sendAnalog(0, 110, Math.max(0f, -clampedY));
                 lastInput = InputSource.TOUCH;
                 lastTouchTimeMs = System.currentTimeMillis();
                 maybeAutoHideControls();
@@ -3323,10 +3326,10 @@ public class MainActivity extends AppCompatActivity {
             joystickRight.setOnJoystickMoveListener((x, y) -> {
                 float clampedX = Math.max(-1f, Math.min(1f, x));
                 float clampedY = Math.max(-1f, Math.min(1f, y));
-                sendAnalog(121, Math.max(0f, clampedX));
-                sendAnalog(123, Math.max(0f, -clampedX));
-                sendAnalog(122, Math.max(0f, clampedY));
-                sendAnalog(120, Math.max(0f, -clampedY));
+                sendAnalog(0, 121, Math.max(0f, clampedX));
+                sendAnalog(0, 123, Math.max(0f, -clampedX));
+                sendAnalog(0, 122, Math.max(0f, clampedY));
+                sendAnalog(0, 120, Math.max(0f, -clampedY));
                 lastInput = InputSource.TOUCH;
                 lastTouchTimeMs = System.currentTimeMillis();
                 maybeAutoHideControls();
@@ -4207,7 +4210,7 @@ public class MainActivity extends AppCompatActivity {
         updateLastControllerDeviceId(event.getDeviceId());
         if (SDLControllerManager.isDeviceSDLJoystick(event.getDeviceId())) {
             SDLControllerManager.handleJoystickMotionEvent(event);
-            handleGamepadMotion(event);
+            handleGamepadMotion(event, resolveControllerIndex(event.getDevice()));
             lastInput = InputSource.CONTROLLER;
             lastControllerTimeMs = System.currentTimeMillis();
             maybeAutoHideControls();
@@ -4222,7 +4225,7 @@ public class MainActivity extends AppCompatActivity {
             if (p_event.getRepeatCount() == 0) {
                 updateLastControllerDeviceId(p_event.getDeviceId());
                 SDLControllerManager.onNativePadDown(p_event.getDeviceId(), p_keyCode);
-                forwardKeyToPad(true, p_keyCode);
+                forwardKeyToPad(resolveControllerIndex(p_event.getDevice()), true, p_keyCode);
                 lastInput = InputSource.CONTROLLER;
                 lastControllerTimeMs = System.currentTimeMillis();
                 maybeAutoHideControls();
@@ -4238,7 +4241,7 @@ public class MainActivity extends AppCompatActivity {
             if (p_event.getRepeatCount() == 0) {
                 updateLastControllerDeviceId(p_event.getDeviceId());
                 SDLControllerManager.onNativePadUp(p_event.getDeviceId(), p_keyCode);
-                forwardKeyToPad(false, p_keyCode);
+                forwardKeyToPad(resolveControllerIndex(p_event.getDevice()), false, p_keyCode);
                 lastInput = InputSource.CONTROLLER;
                 lastControllerTimeMs = System.currentTimeMillis();
                 maybeAutoHideControls();
@@ -4732,22 +4735,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (Throwable ignored) { hideDelayMs = 2500L; }
     }
 
-    private void forwardKeyToPad(boolean down, int keycode) {
+    private void forwardKeyToPad(int controllerIndex, boolean down, int keycode) {
         int mapped = ControllerMappingManager.getPadCodeForKey(keycode);
         if (mapped == ControllerMappingManager.NO_MAPPING) {
             mapped = keycode;
         }
-        NativeApp.setPadButton(mapped, 0, down);
+        NativeApp.setPadButtonForController(controllerIndex, mapped, 0, down);
     }
 
-    private void handleGamepadMotion(MotionEvent e) {
+    private void handleGamepadMotion(MotionEvent e, int controllerIndex) {
         updateLastControllerDeviceId(e.getDeviceId());
         float lx = getCenteredAxis(e, MotionEvent.AXIS_X);
         float ly = getCenteredAxis(e, MotionEvent.AXIS_Y);
-        sendAnalog(111, Math.max(0f, lx));
-        sendAnalog(113, Math.max(0f, -lx));
-        sendAnalog(112, Math.max(0f, ly));
-        sendAnalog(110, Math.max(0f, -ly));
+        sendAnalog(controllerIndex, 111, Math.max(0f, lx));
+        sendAnalog(controllerIndex, 113, Math.max(0f, -lx));
+        sendAnalog(controllerIndex, 112, Math.max(0f, ly));
+        sendAnalog(controllerIndex, 110, Math.max(0f, -ly));
 
         float rx = getCenteredAxis(e, MotionEvent.AXIS_RX);
         float ry = getCenteredAxis(e, MotionEvent.AXIS_RY);
@@ -4755,17 +4758,17 @@ public class MainActivity extends AppCompatActivity {
             rx = getCenteredAxis(e, MotionEvent.AXIS_Z);
             ry = getCenteredAxis(e, MotionEvent.AXIS_RZ);
         }
-        sendAnalog(121, Math.max(0f, rx));
-        sendAnalog(123, Math.max(0f, -rx));
-        sendAnalog(122, Math.max(0f, ry));
-        sendAnalog(120, Math.max(0f, -ry));
+        sendAnalog(controllerIndex, 121, Math.max(0f, rx));
+        sendAnalog(controllerIndex, 123, Math.max(0f, -rx));
+        sendAnalog(controllerIndex, 122, Math.max(0f, ry));
+        sendAnalog(controllerIndex, 120, Math.max(0f, -ry));
 
         float ltrig = e.getAxisValue(MotionEvent.AXIS_LTRIGGER);
         float rtrig = e.getAxisValue(MotionEvent.AXIS_RTRIGGER);
         if (ltrig == 0f) ltrig = e.getAxisValue(MotionEvent.AXIS_BRAKE);
         if (rtrig == 0f) rtrig = e.getAxisValue(MotionEvent.AXIS_GAS);
-        sendAnalog(KeyEvent.KEYCODE_BUTTON_L2, normalizeTrigger(ltrig), TRIGGER_DEADZONE);
-        sendAnalog(KeyEvent.KEYCODE_BUTTON_R2, normalizeTrigger(rtrig), TRIGGER_DEADZONE);
+        sendAnalog(controllerIndex, KeyEvent.KEYCODE_BUTTON_L2, normalizeTrigger(ltrig), TRIGGER_DEADZONE);
+        sendAnalog(controllerIndex, KeyEvent.KEYCODE_BUTTON_R2, normalizeTrigger(rtrig), TRIGGER_DEADZONE);
 
         float hatX = e.getAxisValue(MotionEvent.AXIS_HAT_X);
         float hatY = e.getAxisValue(MotionEvent.AXIS_HAT_Y);
@@ -4774,18 +4777,25 @@ public class MainActivity extends AppCompatActivity {
         boolean nowRight = hatX > hatThreshold;
         boolean nowUp = hatY < -hatThreshold;
         boolean nowDown = hatY > hatThreshold;
-        setAxisState(hatLeft, nowLeft, KeyEvent.KEYCODE_DPAD_LEFT);  hatLeft = nowLeft;
-        setAxisState(hatRight, nowRight, KeyEvent.KEYCODE_DPAD_RIGHT); hatRight = nowRight;
-        setAxisState(hatUp, nowUp, KeyEvent.KEYCODE_DPAD_UP); hatUp = nowUp;
-        setAxisState(hatDown, nowDown, KeyEvent.KEYCODE_DPAD_DOWN); hatDown = nowDown;
+        setAxisState(controllerIndex, KeyEvent.KEYCODE_DPAD_LEFT, nowLeft);
+        setAxisState(controllerIndex, KeyEvent.KEYCODE_DPAD_RIGHT, nowRight);
+        setAxisState(controllerIndex, KeyEvent.KEYCODE_DPAD_UP, nowUp);
+        setAxisState(controllerIndex, KeyEvent.KEYCODE_DPAD_DOWN, nowDown);
     }
 
-    private void setAxisState(boolean prev, boolean now, int code) {
+    private void setAxisState(int controllerIndex, int code, boolean now) {
+        final int stateKey = buildPadStateKey(controllerIndex, code);
+        final boolean prev = hatStates.contains(stateKey);
         if (prev == now) return;
+        if (now) {
+            hatStates.add(stateKey);
+        } else {
+            hatStates.remove(stateKey);
+        }
         if (!ControllerMappingManager.isPadCodeBound(code)) {
             return;
         }
-        NativeApp.setPadButton(code, 0, now);
+        NativeApp.setPadButtonForController(controllerIndex, code, 0, now);
     }
 
     private float getCenteredAxis(MotionEvent e, int axis) {
@@ -4801,28 +4811,29 @@ public class MainActivity extends AppCompatActivity {
         return 0f;
     }
 
-    private void sendAnalog(int keyCode, float normalized) {
-        sendAnalog(keyCode, normalized, ANALOG_DEADZONE);
+    private void sendAnalog(int controllerIndex, int keyCode, float normalized) {
+        sendAnalog(controllerIndex, keyCode, normalized, ANALOG_DEADZONE);
     }
 
-    private void sendAnalog(int keyCode, float normalized, float deadzone) {
+    private void sendAnalog(int controllerIndex, int keyCode, float normalized, float deadzone) {
         if (Float.isNaN(normalized)) normalized = 0f;
         int padCode = ControllerMappingManager.getPadCodeForKey(keyCode);
         if (padCode == ControllerMappingManager.NO_MAPPING) {
             padCode = keyCode;
         }
+        final int stateKey = buildPadStateKey(controllerIndex, padCode);
         if (!ControllerMappingManager.isPadCodeBound(padCode)) {
-            analogStates.put(padCode, 0);
-            NativeApp.setPadButton(padCode, 0, false);
+            analogStates.put(stateKey, 0);
+            NativeApp.setPadButtonForController(controllerIndex, padCode, 0, false);
             return;
         }
         float value = Math.min(1f, Math.max(0f, normalized));
         if (value < deadzone) value = 0f;
         int scaled = Math.round(value * 255f);
-        int prev = analogStates.get(padCode, -1);
+        int prev = analogStates.get(stateKey, -1);
         if (prev == scaled) return;
-        analogStates.put(padCode, scaled);
-        NativeApp.setPadButton(padCode, scaled, scaled > 0);
+        analogStates.put(stateKey, scaled);
+        NativeApp.setPadButtonForController(controllerIndex, padCode, scaled, scaled > 0);
     }
 
     private float normalizeTrigger(float raw) {
@@ -4836,30 +4847,34 @@ public class MainActivity extends AppCompatActivity {
     private static void updateLastControllerDeviceId(int deviceId) {
         if (deviceId >= 0) {
             sLastControllerDeviceId = deviceId;
+            final InputDevice device = InputDevice.getDevice(deviceId);
+            if (device != null) {
+                sLastControllerDeviceIdByPad.put(resolveControllerIndex(device), deviceId);
+            }
         }
     }
 
-    public static void requestControllerRumble(float large, float small) {
+    public static void requestControllerRumble(int padIndex, float large, float small) {
         MainActivity activity = sInstanceRef != null ? sInstanceRef.get() : null;
         if (activity == null) {
-            if (!sVibrationEnabled) stopControllerRumbleStatic();
+            if (!sVibrationEnabled) stopControllerRumbleStatic(-1);
             return;
         }
-        activity.runOnUiThread(() -> activity.dispatchControllerRumble(large, small));
+        activity.runOnUiThread(() -> activity.dispatchControllerRumble(padIndex, large, small));
     }
 
-    private void dispatchControllerRumble(float large, float small) {
+    private void dispatchControllerRumble(int padIndex, float large, float small) {
         if (!sVibrationEnabled) {
-            stopControllerRumble();
+            stopControllerRumble(padIndex);
             return;
         }
         final float clampedLarge = clamp01(large);
         final float clampedSmall = clamp01(small);
         final float combined = Math.max(clampedLarge, clampedSmall);
-        final int deviceId = sLastControllerDeviceId;
+        final int deviceId = resolveRumbleDeviceId(padIndex);
 
         if (combined <= 0f) {
-            stopControllerRumble();
+            stopControllerRumble(padIndex);
             return;
         }
 
@@ -4879,18 +4894,68 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void stopControllerRumble() {
-        stopControllerRumbleStatic();
+    private void stopControllerRumble(int padIndex) {
+        stopControllerRumbleStatic(padIndex);
     }
 
-    private static void stopControllerRumbleStatic() {
-        final int deviceId = sLastControllerDeviceId;
-        try {
-            if (deviceId >= 0) SDLControllerManager.hapticStop(deviceId);
-        } catch (Throwable ignored) {}
+    private int resolveRumbleDeviceId(int padIndex) {
+        if (padIndex >= 0) {
+            final int routedDeviceId = sLastControllerDeviceIdByPad.get(padIndex, -1);
+            if (routedDeviceId >= 0 && SDLControllerManager.isDeviceSDLJoystick(routedDeviceId)) {
+                return routedDeviceId;
+            }
+
+            for (int deviceId : InputDevice.getDeviceIds()) {
+                final InputDevice device = InputDevice.getDevice(deviceId);
+                if (device == null || !SDLControllerManager.isDeviceSDLJoystick(deviceId)) {
+                    continue;
+                }
+                if (resolveControllerIndex(device) == padIndex) {
+                    return deviceId;
+                }
+            }
+        }
+        return sLastControllerDeviceId;
+    }
+
+    private static void stopControllerRumbleStatic(int padIndex) {
+        final Set<Integer> deviceIds = new HashSet<>();
+        if (padIndex >= 0) {
+            final int routedDeviceId = sLastControllerDeviceIdByPad.get(padIndex, -1);
+            if (routedDeviceId >= 0) {
+                deviceIds.add(routedDeviceId);
+            }
+        } else {
+            if (sLastControllerDeviceId >= 0) {
+                deviceIds.add(sLastControllerDeviceId);
+            }
+            for (int index = 0; index < sLastControllerDeviceIdByPad.size(); index++) {
+                final int routedDeviceId = sLastControllerDeviceIdByPad.valueAt(index);
+                if (routedDeviceId >= 0) {
+                    deviceIds.add(routedDeviceId);
+                }
+            }
+        }
+
+        for (int deviceId : deviceIds) {
+            try {
+                SDLControllerManager.hapticStop(deviceId);
+            } catch (Throwable ignored) {}
+        }
         try {
             SDLControllerManager.hapticStop(999999);
         } catch (Throwable ignored) {}
+    }
+
+    private static int resolveControllerIndex(@Nullable InputDevice device) {
+        if (device == null) {
+            return 0;
+        }
+        return InputDeviceRoutingManager.getAssignedPadIndex(device);
+    }
+
+    private static int buildPadStateKey(int controllerIndex, int code) {
+        return (controllerIndex << 16) | (code & 0xffff);
     }
 
     private static float clamp01(float value) {
@@ -4918,9 +4983,9 @@ public class MainActivity extends AppCompatActivity {
         MainActivity activity = sInstanceRef != null ? sInstanceRef.get() : null;
         if (!enabled) {
             if (activity != null) {
-                activity.runOnUiThread(activity::stopControllerRumble);
+                activity.runOnUiThread(() -> activity.stopControllerRumble(-1));
             } else {
-                stopControllerRumbleStatic();
+                stopControllerRumbleStatic(-1);
             }
         }
     }
@@ -5188,7 +5253,7 @@ public class MainActivity extends AppCompatActivity {
         lastTouchTimeMs = System.currentTimeMillis();
         setOnScreenControlsVisible(false);
         applyFullscreen();
-        requestControllerRumble(0f, 0f);
+        requestControllerRumble(-1, 0f, 0f);
         isVmPaused = false;
         updatePauseButtonIcon();
         setFastForwardEnabled(false);

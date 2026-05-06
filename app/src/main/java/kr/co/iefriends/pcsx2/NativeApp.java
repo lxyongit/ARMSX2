@@ -94,7 +94,10 @@ public class NativeApp {
 
 	public static native void setPadVibration(boolean isonoff);
 	public static native void setPadButton(int index, int range, boolean iskeypressed);
+	public static native void setPadButtonForController(int controllerIndex, int index, int range, boolean iskeypressed);
 	public static native void resetKeyStatus();
+	public static native void resetKeyStatusForController(int controllerIndex);
+	public static native int getPadPortCount();
 
 	public static native void setAspectRatio(int type);
 	public static native void setEnableCheats(boolean isonoff);
@@ -151,7 +154,7 @@ public class NativeApp {
     public static native boolean isFullscreenUIEnabled();
 
     public static void onPadVibration(int padIndex, float large, float small) {
-        MainActivity.requestControllerRumble(large, small);
+		MainActivity.requestControllerRumble(padIndex, large, small);
     }
     
     // Native tools for ISO to CHD conversion (and eventually more soon)

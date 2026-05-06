@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.view.InputDevice;
 
@@ -51,20 +52,26 @@ public class ControllerMappingDialog extends DialogFragment {
     private MappingAdapter adapter;
     private ControllerMappingManager.Action waitingForAction;
     private TextView waitingView;
+    private LinearLayout deviceRoutesContainer;
+    private TextView deviceRoutesTitle;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Context context = requireContext();
         ControllerMappingManager.init(context);
+        InputDeviceRoutingManager.init(context);
 
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_controller_mapping, null, false);
         waitingView = view.findViewById(R.id.tv_waiting_for_input);
+        deviceRoutesTitle = view.findViewById(R.id.tv_controller_routes_title);
+        deviceRoutesContainer = view.findViewById(R.id.ll_controller_devices);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_controller_mapping);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         adapter = new MappingAdapter(context, this::beginRebind, this::clearAction);
         recyclerView.setAdapter(adapter);
+        refreshDeviceRoutes(context);
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.controller_mapping_title)
@@ -83,6 +90,53 @@ public class ControllerMappingDialog extends DialogFragment {
             decor.setOnGenericMotionListener((v, event) -> handleMotionEvent(event));
         }
         return dialog;
+    }
+
+    private void refreshDeviceRoutes(@NonNull Context context) {
+        if (deviceRoutesContainer == null || deviceRoutesTitle == null) {
+            return;
+        }
+
+        deviceRoutesContainer.removeAllViews();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        java.util.List<InputDeviceRoutingManager.ConnectedDeviceRoute> routes = InputDeviceRoutingManager.getConnectedDeviceRoutes();
+
+        if (routes.isEmpty()) {
+            deviceRoutesTitle.setVisibility(View.GONE);
+            return;
+        }
+
+        deviceRoutesTitle.setVisibility(View.VISIBLE);
+        final int padCount = InputDeviceRoutingManager.getPadCount();
+        for (InputDeviceRoutingManager.ConnectedDeviceRoute route : routes) {
+            View itemView = inflater.inflate(R.layout.item_controller_device_route, deviceRoutesContainer, false);
+            TextView deviceName = itemView.findViewById(R.id.tv_device_name);
+            TextView deviceAssignment = itemView.findViewById(R.id.tv_device_assignment);
+            View cycleButton = itemView.findViewById(R.id.btn_cycle_pad);
+            View autoButton = itemView.findViewById(R.id.btn_auto_pad);
+
+            deviceName.setText(route.name);
+            deviceAssignment.setText(getAssignmentLabel(route));
+            cycleButton.setOnClickListener(v -> {
+                int nextPadIndex = (route.padIndex + 1) % Math.max(1, padCount);
+                InputDeviceRoutingManager.assignDeviceToPad(route.deviceKey, nextPadIndex);
+                refreshDeviceRoutes(context);
+            });
+            autoButton.setOnClickListener(v -> {
+                InputDeviceRoutingManager.clearDeviceAssignment(route.deviceKey);
+                refreshDeviceRoutes(context);
+            });
+
+            deviceRoutesContainer.addView(itemView);
+        }
+    }
+
+    @NonNull
+    private String getAssignmentLabel(@NonNull InputDeviceRoutingManager.ConnectedDeviceRoute route) {
+        if (route.explicit) {
+            return getString(R.string.controller_routing_assigned, route.padIndex + 1);
+        }
+        return getString(R.string.controller_routing_assigned_auto, route.padIndex + 1);
     }
 
     private void beginRebind(@NonNull ControllerMappingManager.Action action) {

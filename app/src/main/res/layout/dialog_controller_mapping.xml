@@ -17,6 +17,23 @@
         android:text="@string/controller_mapping_instruction"
         android:layout_marginBottom="12dp" />
 
+    <TextView
+        android:id="@+id/tv_controller_routes_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+        android:textColor="?attr/colorOnSurface"
+        android:text="@string/controller_routing_title"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/ll_controller_devices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="12dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_controller_mapping"
         android:layout_width="match_parent"

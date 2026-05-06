@@ -10,6 +10,11 @@
     <string name="controller_mapping_waiting">Press a button…</string>
     <string name="controller_mapping_unbound">Unbound</string>
     <string name="controller_mapping_reset">Reset to Default</string>
+    <string name="controller_routing_title">Controller Slots</string>
+    <string name="controller_routing_assigned">Assigned to Pad %1$d</string>
+    <string name="controller_routing_assigned_auto">Assigned to Pad %1$d (Auto)</string>
+    <string name="controller_routing_cycle">Next Pad</string>
+    <string name="controller_routing_auto">Auto</string>
     <string name="controller_action_dpad_up">D-Pad Up</string>
     <string name="controller_action_dpad_down">D-Pad Down</string>
     <string name="controller_action_dpad_left">D-Pad Left</string>

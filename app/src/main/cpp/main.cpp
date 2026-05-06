@@ -45,7 +45,7 @@ namespace
 	static jmethodID s_ra_notify_login_success = nullptr;
 	static jmethodID s_ra_notify_state_changed = nullptr;
 	static jmethodID s_ra_notify_hardcore_changed = nullptr;
-        static std::mutex s_ra_bridge_mutex;
+    static std::mutex s_ra_bridge_mutex;
 
 	static void EnsureAchievementsClientInitialized()
 	{
@@ -538,50 +538,78 @@ Java_kr_co_iefriends_pcsx2_NativeApp_setPadVibration(JNIEnv *env, jclass clazz,
 }
 
 
-extern "C" JNIEXPORT void JNICALL
-Java_kr_co_iefriends_pcsx2_NativeApp_setPadButton(JNIEnv *env, jclass clazz,
-                                                  jint p_key, jint p_range, jboolean p_keyPressed) {
+namespace
+{
+PadDualshock2::Inputs TranslatePadInput(jint p_key)
+{
+    switch (p_key) {
+        case 19: return PadDualshock2::Inputs::PAD_UP;
+        case 22: return PadDualshock2::Inputs::PAD_RIGHT;
+        case 20: return PadDualshock2::Inputs::PAD_DOWN;
+        case 21: return PadDualshock2::Inputs::PAD_LEFT;
+        case 100: return PadDualshock2::Inputs::PAD_TRIANGLE;
+        case 97: return PadDualshock2::Inputs::PAD_CIRCLE;
+        case 96: return PadDualshock2::Inputs::PAD_CROSS;
+        case 99: return PadDualshock2::Inputs::PAD_SQUARE;
+        case 109: return PadDualshock2::Inputs::PAD_SELECT;
+        case 108: return PadDualshock2::Inputs::PAD_START;
+        case 102: return PadDualshock2::Inputs::PAD_L1;
+        case 104: return PadDualshock2::Inputs::PAD_L2;
+        case 103: return PadDualshock2::Inputs::PAD_R1;
+        case 105: return PadDualshock2::Inputs::PAD_R2;
+        case 106: return PadDualshock2::Inputs::PAD_L3;
+        case 107: return PadDualshock2::Inputs::PAD_R3;
+        case 110: return PadDualshock2::Inputs::PAD_L_UP;
+        case 111: return PadDualshock2::Inputs::PAD_L_RIGHT;
+        case 112: return PadDualshock2::Inputs::PAD_L_DOWN;
+        case 113: return PadDualshock2::Inputs::PAD_L_LEFT;
+        case 120: return PadDualshock2::Inputs::PAD_R_UP;
+        case 121: return PadDualshock2::Inputs::PAD_R_RIGHT;
+        case 122: return PadDualshock2::Inputs::PAD_R_DOWN;
+        case 123: return PadDualshock2::Inputs::PAD_R_LEFT;
+        default: return PadDualshock2::Inputs::PAD_CROSS;
+    }
+}
+
+void SetPadButtonState(jint controller_index, jint p_key, jint p_range, jboolean p_keyPressed)
+{
     if (!VMManager::HasValidVM())
         return;
 
-    PadDualshock2::Inputs _key;
-    switch (p_key) {
-        case 19: _key = PadDualshock2::Inputs::PAD_UP; break;
-        case 22: _key = PadDualshock2::Inputs::PAD_RIGHT; break;
-        case 20: _key = PadDualshock2::Inputs::PAD_DOWN; break;
-        case 21: _key = PadDualshock2::Inputs::PAD_LEFT; break;
-        case 100: _key = PadDualshock2::Inputs::PAD_TRIANGLE; break;
-        case 97: _key = PadDualshock2::Inputs::PAD_CIRCLE; break;
-        case 96: _key = PadDualshock2::Inputs::PAD_CROSS; break;
-        case 99: _key = PadDualshock2::Inputs::PAD_SQUARE; break;
-        case 109: _key = PadDualshock2::Inputs::PAD_SELECT; break;
-        case 108: _key = PadDualshock2::Inputs::PAD_START; break;
-        case 102: _key = PadDualshock2::Inputs::PAD_L1; break;
-        case 104: _key = PadDualshock2::Inputs::PAD_L2; break;
-        case 103: _key = PadDualshock2::Inputs::PAD_R1; break;
-        case 105: _key = PadDualshock2::Inputs::PAD_R2; break;
-        case 106: _key = PadDualshock2::Inputs::PAD_L3; break;
-        case 107: _key = PadDualshock2::Inputs::PAD_R3; break;
-        case 110: _key = PadDualshock2::Inputs::PAD_L_UP; break;
-        case 111: _key = PadDualshock2::Inputs::PAD_L_RIGHT; break;
-        case 112: _key = PadDualshock2::Inputs::PAD_L_DOWN; break;
-        case 113: _key = PadDualshock2::Inputs::PAD_L_LEFT; break;
-        case 120: _key = PadDualshock2::Inputs::PAD_R_UP; break;
-        case 121: _key = PadDualshock2::Inputs::PAD_R_RIGHT; break;
-        case 122: _key = PadDualshock2::Inputs::PAD_R_DOWN; break;
-        case 123: _key = PadDualshock2::Inputs::PAD_R_LEFT; break;
-        default: _key = PadDualshock2::Inputs::PAD_CROSS ; break;
-    }
+    if (controller_index < 0 || controller_index >= static_cast<jint>(Pad::NUM_CONTROLLER_PORTS))
+        return;
+
+    const PadDualshock2::Inputs translated_key = TranslatePadInput(p_key);
+
     float value = 0.0f;
-    if (p_keyPressed) {
-        if (p_range > 0) {
-            int clamped = std::min(255, std::max(0, p_range));
-            value = static_cast<float>(clamped) / 255.0f; 
-        } else {
+    if (p_keyPressed)
+    {
+        if (p_range > 0)
+        {
+            const int clamped = std::min(255, std::max(0, p_range));
+            value = static_cast<float>(clamped) / 255.0f;
+        }
+        else
+        {
             value = 1.0f;
         }
     }
-    Pad::SetControllerState(0, static_cast<u32>(_key), value);
+
+    Pad::SetControllerState(static_cast<u32>(controller_index), static_cast<u32>(translated_key), value);
+}
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_kr_co_iefriends_pcsx2_NativeApp_setPadButton(JNIEnv *env, jclass clazz,
+                                                  jint p_key, jint p_range, jboolean p_keyPressed) {
+    SetPadButtonState(0, p_key, p_range, p_keyPressed);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_kr_co_iefriends_pcsx2_NativeApp_setPadButtonForController(JNIEnv *env, jclass clazz,
+                                                               jint controller_index, jint p_key,
+                                                               jint p_range, jboolean p_keyPressed) {
+    SetPadButtonState(controller_index, p_key, p_range, p_keyPressed);
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -596,6 +624,26 @@ Java_kr_co_iefriends_pcsx2_NativeApp_resetKeyStatus(JNIEnv *env, jclass clazz) {
     }
 
     Pad::UpdateMacroButtons();
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_kr_co_iefriends_pcsx2_NativeApp_resetKeyStatusForController(JNIEnv *env, jclass clazz,
+                                                                 jint controller_index) {
+    if (!VMManager::HasValidVM())
+        return;
+
+    if (controller_index < 0 || controller_index >= static_cast<jint>(Pad::NUM_CONTROLLER_PORTS))
+        return;
+
+    for (u32 key = 0; key < static_cast<u32>(PadDualshock2::Inputs::LENGTH); key++)
+        Pad::SetControllerState(static_cast<u32>(controller_index), key, 0.0f);
+
+    Pad::UpdateMacroButtons();
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_kr_co_iefriends_pcsx2_NativeApp_getPadPortCount(JNIEnv *env, jclass clazz) {
+    return static_cast<jint>(Pad::NUM_CONTROLLER_PORTS);
 }
 
 extern "C"
