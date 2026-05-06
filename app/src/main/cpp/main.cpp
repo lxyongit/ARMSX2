@@ -537,11 +537,47 @@ Java_kr_co_iefriends_pcsx2_NativeApp_setPadVibration(JNIEnv *env, jclass clazz,
         Pad::LoadConfig(*s_settings_interface);
 }
 
-
 namespace
 {
 PadDualshock2::Inputs TranslatePadInput(jint p_key)
 {
+    switch (p_key) {
+        case 19: return PadDualshock2::Inputs::PAD_UP;
+        case 22: return PadDualshock2::Inputs::PAD_RIGHT;
+        case 20: return PadDualshock2::Inputs::PAD_DOWN;
+        case 21: return PadDualshock2::Inputs::PAD_LEFT;
+        case 100: return PadDualshock2::Inputs::PAD_TRIANGLE;
+        case 97: return PadDualshock2::Inputs::PAD_CIRCLE;
+        case 96: return PadDualshock2::Inputs::PAD_CROSS;
+        case 99: return PadDualshock2::Inputs::PAD_SQUARE;
+        case 109: return PadDualshock2::Inputs::PAD_SELECT;
+        case 108: return PadDualshock2::Inputs::PAD_START;
+        case 102: return PadDualshock2::Inputs::PAD_L1;
+        case 104: return PadDualshock2::Inputs::PAD_L2;
+        case 103: return PadDualshock2::Inputs::PAD_R1;
+        case 105: return PadDualshock2::Inputs::PAD_R2;
+        case 106: return PadDualshock2::Inputs::PAD_L3;
+        case 107: return PadDualshock2::Inputs::PAD_R3;
+        case 110: return PadDualshock2::Inputs::PAD_L_UP;
+        case 111: return PadDualshock2::Inputs::PAD_L_RIGHT;
+        case 112: return PadDualshock2::Inputs::PAD_L_DOWN;
+        case 113: return PadDualshock2::Inputs::PAD_L_LEFT;
+        case 120: return PadDualshock2::Inputs::PAD_R_UP;
+        case 121: return PadDualshock2::Inputs::PAD_R_RIGHT;
+        case 122: return PadDualshock2::Inputs::PAD_R_DOWN;
+        case 123: return PadDualshock2::Inputs::PAD_R_LEFT;
+        default: return PadDualshock2::Inputs::PAD_CROSS;
+    }
+}
+
+
+extern "C" JNIEXPORT void JNICALL
+Java_kr_co_iefriends_pcsx2_NativeApp_setPadButton(JNIEnv *env, jclass clazz,
+                                                  jint p_key, jint p_range, jboolean p_keyPressed) {
+    if (!VMManager::HasValidVM())
+        return;
+
+    PadDualshock2::Inputs _key;
     switch (p_key) {
         case 19: return PadDualshock2::Inputs::PAD_UP;
         case 22: return PadDualshock2::Inputs::PAD_RIGHT;
