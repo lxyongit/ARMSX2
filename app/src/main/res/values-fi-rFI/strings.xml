@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Vinkit</string>
+	<string name="controller_mapping_hide_tips">Piilota vinkit</string>
+	<string name="controller_mapping_auto_prompt">Uusi ohjain havaittu. Tallenna ehdotettu asettelu tai maarita jokainen toiminto uudelleen.</string>
+	<string name="controller_mapping_sticks_triggers">Sauvat ja liipaisimet</string>
+	<string name="controller_mapping_axis_summary">Vasen sauva kayttaa X/Y:ta. Oikea sauva suosii RX/RY:ta ja palaa tarvittaessa Z/RZ:aan. L2/R2 lukevat liipaisinakselit automaattisesti.</string>
+	<string name="controller_mapping_menu_hint">Menu-nappain voidaan myos maarittaa, ja se avaa pelin valikon painettaessa.</string>
+	<string name="controller_mapping_waiting_for">Odotetaan syotetta: %1$s</string>
+	<string name="controller_mapping_saved">Ohjainasettelu tallennettu laitteelle %1$s</string>
+	<string name="controller_action_menu">Valikko</string>
+	<string name="controller_key_mode">Tila</string>
+	<string name="controller_connected_hint">Ohjain yhdistetty: %1$s. Voit muuttaa sen asetuksia valikosta.</string>
+	<string name="controller_disconnected">Ohjain irrotettu: %1$s</string>
+	<string name="ps2_storage_permission_required">PS2-pelien lataaminen edellyttaa paasya kaikkiin tiedostoihin.</string>
+	<string name="ps2_cheats">Huijaukset</string>
+	<string name="ps2_cheats_manager_title">Huijausten hallinta</string>
+	<string name="ps2_new">Uusi</string>
+	<string name="ps2_back">Takaisin</string>
+	<string name="ps2_restart">Kaynnista uudelleen</string>
+	<string name="ps2_exit">Poistu</string>
+	<string name="ps2_connected_controller">Yhdistetty ohjain: %1$s</string>
+	<string name="ps2_run_speed">Suoritusnopeus</string>
+	<string name="ps2_aspect_ratio_stretch">Venyta</string>
+	<string name="ps2_aspect_ratio_auto">Auto 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Auto</string>
+	<string name="ps2_renderer_software">Ohjelmisto</string>
+	<string name="ps2_resolution_native">1× Natiivi</string>
+	<string name="ps2_mipmap_auto">Auto</string>
+	<string name="ps2_mipmap_basic">Perus</string>
+	<string name="ps2_mipmap_full">Taysi</string>
+	<string name="ps2_half_pixel_offset_off">Pois</string>
+	<string name="ps2_half_pixel_offset_normal">Normaali</string>
+	<string name="ps2_half_pixel_offset_special">Erityinen</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Erityinen (aggressiivinen)</string>
+	<string name="ps2_texture_preloading_disabled">Pois kaytosta</string>
+	<string name="ps2_texture_preloading_partial">Osittainen</string>
+	<string name="ps2_texture_preloading_full">Taysi</string>
+	<string name="ps2_limiter_normal">Normaali</string>
+	<string name="ps2_limiter_slow_motion">Hidastus</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Rajoittamaton</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Pois)</string>
+	<string name="ps2_delete">Poista</string>
+	<string name="ps2_cheat_code">Koodi</string>
+	<string name="ps2_cheat_name">Nimi</string>
+	<string name="ps2_add">Lisaa</string>
 </resources>

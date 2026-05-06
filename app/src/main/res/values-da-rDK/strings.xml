@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Tips</string>
+	<string name="controller_mapping_hide_tips">Skjul tips</string>
+	<string name="controller_mapping_auto_prompt">Ny controller registreret. Gem det foreslaede layout, eller tilknyt hver handling igen.</string>
+	<string name="controller_mapping_sticks_triggers">Sticks og triggere</string>
+	<string name="controller_mapping_axis_summary">Venstre stick bruger X/Y. Hojre stick foretraekker RX/RY og falder tilbage til Z/RZ efter behov. L2/R2 laeser trigger-akser automatisk.</string>
+	<string name="controller_mapping_menu_hint">Menu-tasten kan ogsa tilknyttes og abner spilmenuen, nar den trykkes.</string>
+	<string name="controller_mapping_waiting_for">Venter pa input: %1$s</string>
+	<string name="controller_mapping_saved">Controllerkortlaegning gemt for %1$s</string>
+	<string name="controller_action_menu">Menu</string>
+	<string name="controller_key_mode">Tilstand</string>
+	<string name="controller_connected_hint">Controller tilsluttet: %1$s. Du kan aendre kortlaegningen fra menuen.</string>
+	<string name="controller_disconnected">Controller frakoblet: %1$s</string>
+	<string name="ps2_storage_permission_required">Adgang til alle filer kraeves for at indlaese PS2-spil.</string>
+	<string name="ps2_cheats">Snydekoder</string>
+	<string name="ps2_cheats_manager_title">Snydekodehåndtering</string>
+	<string name="ps2_new">Ny</string>
+	<string name="ps2_back">Tilbage</string>
+	<string name="ps2_restart">Genstart</string>
+	<string name="ps2_exit">Afslut</string>
+	<string name="ps2_connected_controller">Tilkoblet controller: %1$s</string>
+	<string name="ps2_run_speed">Korselshastighed</string>
+	<string name="ps2_aspect_ratio_stretch">Straek</string>
+	<string name="ps2_aspect_ratio_auto">Auto 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Auto</string>
+	<string name="ps2_renderer_software">Software</string>
+	<string name="ps2_resolution_native">1× Native</string>
+	<string name="ps2_mipmap_auto">Auto</string>
+	<string name="ps2_mipmap_basic">Grundlaeggende</string>
+	<string name="ps2_mipmap_full">Fuld</string>
+	<string name="ps2_half_pixel_offset_off">Fra</string>
+	<string name="ps2_half_pixel_offset_normal">Normal</string>
+	<string name="ps2_half_pixel_offset_special">Speciel</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Speciel (aggressiv)</string>
+	<string name="ps2_texture_preloading_disabled">Deaktiveret</string>
+	<string name="ps2_texture_preloading_partial">Delvis</string>
+	<string name="ps2_texture_preloading_full">Fuld</string>
+	<string name="ps2_limiter_normal">Normal</string>
+	<string name="ps2_limiter_slow_motion">Slowmotion</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Ubegranset</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Fra)</string>
+	<string name="ps2_delete">Slet</string>
+	<string name="ps2_cheat_code">Kode</string>
+	<string name="ps2_cheat_name">Navn</string>
+	<string name="ps2_add">Tilfoj</string>
 </resources>

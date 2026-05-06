@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">İpuçları</string>
+	<string name="controller_mapping_hide_tips">İpuçlarını gizle</string>
+	<string name="controller_mapping_auto_prompt">Yeni denetleyici algılandı. Önerilen düzeni kaydedin veya her eylemi yeniden bağlayın.</string>
+	<string name="controller_mapping_sticks_triggers">Çubuklar ve tetikler</string>
+	<string name="controller_mapping_axis_summary">Sol çubuk X/Y kullanır. Sağ çubuk RX/RY değerlerini tercih eder ve gerektiğinde Z/RZ değerlerine döner. L2/R2 tetik eksenlerini otomatik olarak okur.</string>
+	<string name="controller_mapping_menu_hint">Menu tuşu da eşlenebilir ve basıldığında oyun içi menüyü açar.</string>
+	<string name="controller_mapping_waiting_for">Girdi bekleniyor: %1$s</string>
+	<string name="controller_mapping_saved">%1$s için denetleyici eşlemesi kaydedildi</string>
+	<string name="controller_action_menu">Menü</string>
+	<string name="controller_key_mode">Mod</string>
+	<string name="controller_connected_hint">Denetleyici bağlandı: %1$s. Eşlemeyi menüden değiştirebilirsiniz.</string>
+	<string name="controller_disconnected">Denetleyici bağlantısı kesildi: %1$s</string>
+	<string name="ps2_storage_permission_required">PS2 oyunlarını yüklemek için tüm dosyalara erişim gerekir.</string>
+	<string name="ps2_cheats">Hileler</string>
+	<string name="ps2_cheats_manager_title">Hile Yöneticisi</string>
+	<string name="ps2_new">Yeni</string>
+	<string name="ps2_back">Geri</string>
+	<string name="ps2_restart">Yeniden başlat</string>
+	<string name="ps2_exit">Çıkış</string>
+	<string name="ps2_connected_controller">Bağlı denetleyici: %1$s</string>
+	<string name="ps2_run_speed">Çalışma hızı</string>
+	<string name="ps2_aspect_ratio_stretch">Ger</string>
+	<string name="ps2_aspect_ratio_auto">Otomatik 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Otomatik</string>
+	<string name="ps2_renderer_software">Yazılım</string>
+	<string name="ps2_resolution_native">1× Yerel</string>
+	<string name="ps2_mipmap_auto">Otomatik</string>
+	<string name="ps2_mipmap_basic">Temel</string>
+	<string name="ps2_mipmap_full">Tam</string>
+	<string name="ps2_half_pixel_offset_off">Kapalı</string>
+	<string name="ps2_half_pixel_offset_normal">Normal</string>
+	<string name="ps2_half_pixel_offset_special">Özel</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Özel (agresif)</string>
+	<string name="ps2_texture_preloading_disabled">Devre dışı</string>
+	<string name="ps2_texture_preloading_partial">Kısmi</string>
+	<string name="ps2_texture_preloading_full">Tam</string>
+	<string name="ps2_limiter_normal">Normal</string>
+	<string name="ps2_limiter_slow_motion">Yavaş çekim</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Sınırsız</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Kapalı)</string>
+	<string name="ps2_delete">Sil</string>
+	<string name="ps2_cheat_code">Kod</string>
+	<string name="ps2_cheat_name">Ad</string>
+	<string name="ps2_add">Ekle</string>
 </resources>

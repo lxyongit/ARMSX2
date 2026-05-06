@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">تلميحات</string>
+	<string name="controller_mapping_hide_tips">إخفاء التلميحات</string>
+	<string name="controller_mapping_auto_prompt">تم اكتشاف وحدة تحكم جديدة. احفظ التخطيط المقترح أو أعد ربط كل إجراء.</string>
+	<string name="controller_mapping_sticks_triggers">العصي وأزرار الزناد</string>
+	<string name="controller_mapping_axis_summary">تستخدم العصا اليسرى X/Y. وتفضل العصا اليمنى RX/RY وتعود إلى Z/RZ عند الحاجة. يقرأ L2/R2 محوري الزناد تلقائيا.</string>
+	<string name="controller_mapping_menu_hint">يمكن أيضا تعيين زر القائمة، وسيفتح قائمة اللعبة عند الضغط عليه.</string>
+	<string name="controller_mapping_waiting_for">في انتظار الإدخال: %1$s</string>
+	<string name="controller_mapping_saved">تم حفظ تعيين وحدة التحكم لـ %1$s</string>
+	<string name="controller_action_menu">القائمة</string>
+	<string name="controller_key_mode">الوضع</string>
+	<string name="controller_connected_hint">تم توصيل وحدة التحكم: %1$s. يمكنك تغيير تعيينها من القائمة.</string>
+	<string name="controller_disconnected">تم فصل وحدة التحكم: %1$s</string>
+	<string name="ps2_storage_permission_required">يلزم الوصول إلى جميع الملفات لتحميل ألعاب PS2.</string>
+	<string name="ps2_cheats">الغش</string>
+	<string name="ps2_cheats_manager_title">مدير الغش</string>
+	<string name="ps2_new">جديد</string>
+	<string name="ps2_back">رجوع</string>
+	<string name="ps2_restart">إعادة التشغيل</string>
+	<string name="ps2_exit">خروج</string>
+	<string name="ps2_connected_controller">وحدة التحكم المتصلة: %1$s</string>
+	<string name="ps2_run_speed">سرعة التشغيل</string>
+	<string name="ps2_aspect_ratio_stretch">تمديد</string>
+	<string name="ps2_aspect_ratio_auto">تلقائي 4:3/3:2</string>
+	<string name="ps2_renderer_auto">تلقائي</string>
+	<string name="ps2_renderer_software">برمجي</string>
+	<string name="ps2_resolution_native">1× أصلي</string>
+	<string name="ps2_mipmap_auto">تلقائي</string>
+	<string name="ps2_mipmap_basic">أساسي</string>
+	<string name="ps2_mipmap_full">كامل</string>
+	<string name="ps2_half_pixel_offset_off">إيقاف</string>
+	<string name="ps2_half_pixel_offset_normal">عادي</string>
+	<string name="ps2_half_pixel_offset_special">خاص</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">خاص (عدواني)</string>
+	<string name="ps2_texture_preloading_disabled">معطل</string>
+	<string name="ps2_texture_preloading_partial">جزئي</string>
+	<string name="ps2_texture_preloading_full">كامل</string>
+	<string name="ps2_limiter_normal">عادي</string>
+	<string name="ps2_limiter_slow_motion">حركة بطيئة</string>
+	<string name="ps2_limiter_turbo">توربو</string>
+	<string name="ps2_limiter_unlimited">غير محدود</string>
+	<string name="ps2_ee_cycle_skip_off">0 (إيقاف)</string>
+	<string name="ps2_delete">حذف</string>
+	<string name="ps2_cheat_code">رمز</string>
+	<string name="ps2_cheat_name">اسم</string>
+	<string name="ps2_add">إضافة</string>
 </resources>

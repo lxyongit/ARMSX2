@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Поради</string>
+	<string name="controller_mapping_hide_tips">Приховати поради</string>
+	<string name="controller_mapping_auto_prompt">Виявлено новий контролер. Збережіть запропоновану схему або перепризначте кожну дію.</string>
+	<string name="controller_mapping_sticks_triggers">Стіки та тригери</string>
+	<string name="controller_mapping_axis_summary">Лівий стік використовує X/Y. Правий стік надає перевагу RX/RY і за потреби повертається до Z/RZ. L2/R2 автоматично зчитують осі тригерів.</string>
+	<string name="controller_mapping_menu_hint">Кнопку Menu також можна призначити, і при натисканні вона відкриє ігрове меню.</string>
+	<string name="controller_mapping_waiting_for">Очікування введення: %1$s</string>
+	<string name="controller_mapping_saved">Схему контролера збережено для %1$s</string>
+	<string name="controller_action_menu">Меню</string>
+	<string name="controller_key_mode">Режим</string>
+	<string name="controller_connected_hint">Контролер підключено: %1$s. Ви можете змінити його схему в меню.</string>
+	<string name="controller_disconnected">Контролер відключено: %1$s</string>
+	<string name="ps2_storage_permission_required">Для завантаження ігор PS2 потрібен доступ до всіх файлів.</string>
+	<string name="ps2_cheats">Чити</string>
+	<string name="ps2_cheats_manager_title">Менеджер читів</string>
+	<string name="ps2_new">Новий</string>
+	<string name="ps2_back">Назад</string>
+	<string name="ps2_restart">Перезапустити</string>
+	<string name="ps2_exit">Вийти</string>
+	<string name="ps2_connected_controller">Підключений контролер: %1$s</string>
+	<string name="ps2_run_speed">Швидкість роботи</string>
+	<string name="ps2_aspect_ratio_stretch">Розтягнути</string>
+	<string name="ps2_aspect_ratio_auto">Авто 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Авто</string>
+	<string name="ps2_renderer_software">Програмний</string>
+	<string name="ps2_resolution_native">1× Рідне</string>
+	<string name="ps2_mipmap_auto">Авто</string>
+	<string name="ps2_mipmap_basic">Базовий</string>
+	<string name="ps2_mipmap_full">Повний</string>
+	<string name="ps2_half_pixel_offset_off">Вимк.</string>
+	<string name="ps2_half_pixel_offset_normal">Звичайний</string>
+	<string name="ps2_half_pixel_offset_special">Особливий</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Особливий (агресивний)</string>
+	<string name="ps2_texture_preloading_disabled">Вимкнено</string>
+	<string name="ps2_texture_preloading_partial">Частково</string>
+	<string name="ps2_texture_preloading_full">Повністю</string>
+	<string name="ps2_limiter_normal">Звичайний</string>
+	<string name="ps2_limiter_slow_motion">Уповільнення</string>
+	<string name="ps2_limiter_turbo">Турбо</string>
+	<string name="ps2_limiter_unlimited">Без обмежень</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Вимк.)</string>
+	<string name="ps2_delete">Видалити</string>
+	<string name="ps2_cheat_code">Код</string>
+	<string name="ps2_cheat_name">Назва</string>
+	<string name="ps2_add">Додати</string>
 </resources>

@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Consells</string>
+	<string name="controller_mapping_hide_tips">Amaga els consells</string>
+	<string name="controller_mapping_auto_prompt">Controlador nou detectat. Desa la disposicio suggerida o torna a assignar cada accio.</string>
+	<string name="controller_mapping_sticks_triggers">Palanques i gallets</string>
+	<string name="controller_mapping_axis_summary">El stick esquerre fa servir X/Y. El stick dret prefereix RX/RY i torna a Z/RZ quan cal. L2/R2 llegeixen automaticament els eixos dels gallets.</string>
+	<string name="controller_mapping_menu_hint">La tecla Menu tambe es pot assignar i obrira el menu del joc en premer-la.</string>
+	<string name="controller_mapping_waiting_for">Esperant entrada: %1$s</string>
+	<string name="controller_mapping_saved">Mapatge del controlador desat per a %1$s</string>
+	<string name="controller_action_menu">Menu</string>
+	<string name="controller_key_mode">Mode</string>
+	<string name="controller_connected_hint">Controlador connectat: %1$s. Pots canviar-ne el mapatge des del menu.</string>
+	<string name="controller_disconnected">Controlador desconnectat: %1$s</string>
+	<string name="ps2_storage_permission_required">Cal acces a tots els fitxers per carregar jocs de PS2.</string>
+	<string name="ps2_cheats">Trucs</string>
+	<string name="ps2_cheats_manager_title">Gestor de trucs</string>
+	<string name="ps2_new">Nou</string>
+	<string name="ps2_back">Enrere</string>
+	<string name="ps2_restart">Reinicia</string>
+	<string name="ps2_exit">Sortir</string>
+	<string name="ps2_connected_controller">Controlador connectat: %1$s</string>
+	<string name="ps2_run_speed">Velocitat d'execucio</string>
+	<string name="ps2_aspect_ratio_stretch">Estira</string>
+	<string name="ps2_aspect_ratio_auto">Automatic 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Automatic</string>
+	<string name="ps2_renderer_software">Programari</string>
+	<string name="ps2_resolution_native">1× Natiu</string>
+	<string name="ps2_mipmap_auto">Automatic</string>
+	<string name="ps2_mipmap_basic">Basic</string>
+	<string name="ps2_mipmap_full">Complet</string>
+	<string name="ps2_half_pixel_offset_off">Desactivat</string>
+	<string name="ps2_half_pixel_offset_normal">Normal</string>
+	<string name="ps2_half_pixel_offset_special">Especial</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Especial (agressiu)</string>
+	<string name="ps2_texture_preloading_disabled">Inhabilitat</string>
+	<string name="ps2_texture_preloading_partial">Parcial</string>
+	<string name="ps2_texture_preloading_full">Complet</string>
+	<string name="ps2_limiter_normal">Normal</string>
+	<string name="ps2_limiter_slow_motion">Moviment lent</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Sense limit</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Desactivat)</string>
+	<string name="ps2_delete">Suprimeix</string>
+	<string name="ps2_cheat_code">Codi</string>
+	<string name="ps2_cheat_name">Nom</string>
+	<string name="ps2_add">Afegeix</string>
 </resources>

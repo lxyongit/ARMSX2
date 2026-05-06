@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Tips</string>
+	<string name="controller_mapping_hide_tips">Tips verbergen</string>
+	<string name="controller_mapping_auto_prompt">Nieuwe controller gedetecteerd. Sla de voorgestelde indeling op of wijs elke actie opnieuw toe.</string>
+	<string name="controller_mapping_sticks_triggers">Sticks en triggers</string>
+	<string name="controller_mapping_axis_summary">De linker stick gebruikt X/Y. De rechter stick geeft de voorkeur aan RX/RY en valt zo nodig terug op Z/RZ. L2/R2 lezen triggerassen automatisch.</string>
+	<string name="controller_mapping_menu_hint">De Menu-toets kan ook worden toegewezen en opent het in-game menu wanneer erop wordt gedrukt.</string>
+	<string name="controller_mapping_waiting_for">Wachten op invoer: %1$s</string>
+	<string name="controller_mapping_saved">Controllerindeling opgeslagen voor %1$s</string>
+	<string name="controller_action_menu">Menu</string>
+	<string name="controller_key_mode">Modus</string>
+	<string name="controller_connected_hint">Controller verbonden: %1$s. Je kunt de indeling wijzigen via het menu.</string>
+	<string name="controller_disconnected">Controller losgekoppeld: %1$s</string>
+	<string name="ps2_storage_permission_required">Toegang tot alle bestanden is vereist om PS2-games te laden.</string>
+	<string name="ps2_cheats">Cheats</string>
+	<string name="ps2_cheats_manager_title">Cheatbeheer</string>
+	<string name="ps2_new">Nieuw</string>
+	<string name="ps2_back">Terug</string>
+	<string name="ps2_restart">Herstarten</string>
+	<string name="ps2_exit">Afsluiten</string>
+	<string name="ps2_connected_controller">Verbonden controller: %1$s</string>
+	<string name="ps2_run_speed">Loopsnelheid</string>
+	<string name="ps2_aspect_ratio_stretch">Uitrekken</string>
+	<string name="ps2_aspect_ratio_auto">Automatisch 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Automatisch</string>
+	<string name="ps2_renderer_software">Software</string>
+	<string name="ps2_resolution_native">1× Native</string>
+	<string name="ps2_mipmap_auto">Automatisch</string>
+	<string name="ps2_mipmap_basic">Basis</string>
+	<string name="ps2_mipmap_full">Volledig</string>
+	<string name="ps2_half_pixel_offset_off">Uit</string>
+	<string name="ps2_half_pixel_offset_normal">Normaal</string>
+	<string name="ps2_half_pixel_offset_special">Speciaal</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Speciaal (agressief)</string>
+	<string name="ps2_texture_preloading_disabled">Uitgeschakeld</string>
+	<string name="ps2_texture_preloading_partial">Gedeeltelijk</string>
+	<string name="ps2_texture_preloading_full">Volledig</string>
+	<string name="ps2_limiter_normal">Normaal</string>
+	<string name="ps2_limiter_slow_motion">Slow motion</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Onbeperkt</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Uit)</string>
+	<string name="ps2_delete">Verwijderen</string>
+	<string name="ps2_cheat_code">Code</string>
+	<string name="ps2_cheat_name">Naam</string>
+	<string name="ps2_add">Toevoegen</string>
 </resources>

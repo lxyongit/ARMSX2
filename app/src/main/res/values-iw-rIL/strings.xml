@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">טיפים</string>
+	<string name="controller_mapping_hide_tips">הסתר טיפים</string>
+	<string name="controller_mapping_auto_prompt">זוהה בקר חדש. שמור את הפריסה המוצעת או קשר מחדש כל פעולה.</string>
+	<string name="controller_mapping_sticks_triggers">סטיקים וטריגרים</string>
+	<string name="controller_mapping_axis_summary">הסטיק השמאלי משתמש ב-X/Y. הסטיק הימני מעדיף RX/RY וחוזר ל-Z/RZ בעת הצורך. L2/R2 קוראים את צירי הטריגר באופן אוטומטי.</string>
+	<string name="controller_mapping_menu_hint">ניתן גם למפות את מקש התפריט והוא יפתח את תפריט המשחק בלחיצה.</string>
+	<string name="controller_mapping_waiting_for">ממתין לקלט: %1$s</string>
+	<string name="controller_mapping_saved">מיפוי הבקר נשמר עבור %1$s</string>
+	<string name="controller_action_menu">תפריט</string>
+	<string name="controller_key_mode">מצב</string>
+	<string name="controller_connected_hint">הבקר חובר: %1$s. אפשר לשנות את המיפוי שלו מתוך התפריט.</string>
+	<string name="controller_disconnected">הבקר נותק: %1$s</string>
+	<string name="ps2_storage_permission_required">נדרשת גישה לכל הקבצים כדי לטעון משחקי PS2.</string>
+	<string name="ps2_cheats">קודים</string>
+	<string name="ps2_cheats_manager_title">מנהל קודים</string>
+	<string name="ps2_new">חדש</string>
+	<string name="ps2_back">חזרה</string>
+	<string name="ps2_restart">הפעלה מחדש</string>
+	<string name="ps2_exit">יציאה</string>
+	<string name="ps2_connected_controller">בקר מחובר: %1$s</string>
+	<string name="ps2_run_speed">מהירות ריצה</string>
+	<string name="ps2_aspect_ratio_stretch">מתיחה</string>
+	<string name="ps2_aspect_ratio_auto">אוטומטי 4:3/3:2</string>
+	<string name="ps2_renderer_auto">אוטומטי</string>
+	<string name="ps2_renderer_software">תוכנה</string>
+	<string name="ps2_resolution_native">1× מקורי</string>
+	<string name="ps2_mipmap_auto">אוטומטי</string>
+	<string name="ps2_mipmap_basic">בסיסי</string>
+	<string name="ps2_mipmap_full">מלא</string>
+	<string name="ps2_half_pixel_offset_off">כבוי</string>
+	<string name="ps2_half_pixel_offset_normal">רגיל</string>
+	<string name="ps2_half_pixel_offset_special">מיוחד</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">מיוחד (אגרסיבי)</string>
+	<string name="ps2_texture_preloading_disabled">מושבת</string>
+	<string name="ps2_texture_preloading_partial">חלקי</string>
+	<string name="ps2_texture_preloading_full">מלא</string>
+	<string name="ps2_limiter_normal">רגיל</string>
+	<string name="ps2_limiter_slow_motion">הילוך איטי</string>
+	<string name="ps2_limiter_turbo">טורבו</string>
+	<string name="ps2_limiter_unlimited">ללא הגבלה</string>
+	<string name="ps2_ee_cycle_skip_off">0 (כבוי)</string>
+	<string name="ps2_delete">מחק</string>
+	<string name="ps2_cheat_code">קוד</string>
+	<string name="ps2_cheat_name">שם</string>
+	<string name="ps2_add">הוסף</string>
 </resources>

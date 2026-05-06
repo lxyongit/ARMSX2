@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Советы</string>
+	<string name="controller_mapping_hide_tips">Скрыть советы</string>
+	<string name="controller_mapping_auto_prompt">Обнаружен новый контроллер. Сохраните предложенную раскладку или переназначьте каждое действие.</string>
+	<string name="controller_mapping_sticks_triggers">Стики и триггеры</string>
+	<string name="controller_mapping_axis_summary">Левый стик использует X/Y. Правый стик предпочитает RX/RY и при необходимости переключается на Z/RZ. L2/R2 автоматически считывают оси триггеров.</string>
+	<string name="controller_mapping_menu_hint">Кнопку Menu тоже можно назначить, и при нажатии она откроет игровое меню.</string>
+	<string name="controller_mapping_waiting_for">Ожидание ввода: %1$s</string>
+	<string name="controller_mapping_saved">Схема контроллера сохранена для %1$s</string>
+	<string name="controller_action_menu">Меню</string>
+	<string name="controller_key_mode">Режим</string>
+	<string name="controller_connected_hint">Контроллер подключен: %1$s. Вы можете изменить раскладку в меню.</string>
+	<string name="controller_disconnected">Контроллер отключен: %1$s</string>
+	<string name="ps2_storage_permission_required">Для загрузки игр PS2 требуется доступ ко всем файлам.</string>
+	<string name="ps2_cheats">Читы</string>
+	<string name="ps2_cheats_manager_title">Менеджер читов</string>
+	<string name="ps2_new">Новый</string>
+	<string name="ps2_back">Назад</string>
+	<string name="ps2_restart">Перезапустить</string>
+	<string name="ps2_exit">Выход</string>
+	<string name="ps2_connected_controller">Подключенный контроллер: %1$s</string>
+	<string name="ps2_run_speed">Скорость работы</string>
+	<string name="ps2_aspect_ratio_stretch">Растянуть</string>
+	<string name="ps2_aspect_ratio_auto">Авто 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Авто</string>
+	<string name="ps2_renderer_software">Программный</string>
+	<string name="ps2_resolution_native">1× Родное</string>
+	<string name="ps2_mipmap_auto">Авто</string>
+	<string name="ps2_mipmap_basic">Базовый</string>
+	<string name="ps2_mipmap_full">Полный</string>
+	<string name="ps2_half_pixel_offset_off">Выкл.</string>
+	<string name="ps2_half_pixel_offset_normal">Обычный</string>
+	<string name="ps2_half_pixel_offset_special">Особый</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Особый (агрессивный)</string>
+	<string name="ps2_texture_preloading_disabled">Отключено</string>
+	<string name="ps2_texture_preloading_partial">Частично</string>
+	<string name="ps2_texture_preloading_full">Полностью</string>
+	<string name="ps2_limiter_normal">Обычный</string>
+	<string name="ps2_limiter_slow_motion">Замедление</string>
+	<string name="ps2_limiter_turbo">Турбо</string>
+	<string name="ps2_limiter_unlimited">Без ограничений</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Выкл.)</string>
+	<string name="ps2_delete">Удалить</string>
+	<string name="ps2_cheat_code">Код</string>
+	<string name="ps2_cheat_name">Имя</string>
+	<string name="ps2_add">Добавить</string>
 </resources>

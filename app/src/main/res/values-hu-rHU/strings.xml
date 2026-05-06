@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Tippek</string>
+	<string name="controller_mapping_hide_tips">Tippek elrejtese</string>
+	<string name="controller_mapping_auto_prompt">Uj vezerlo eszlelve. Mentse az ajanlott kiosztast, vagy rendelje ujra az osszes muveletet.</string>
+	<string name="controller_mapping_sticks_triggers">Karok es ravaszok</string>
+	<string name="controller_mapping_axis_summary">A bal kar X/Y-t hasznal. A jobb kar elonyben reszesiti az RX/RY-t, es szukseg eseten Z/RZ-re valt. Az L2/R2 automatikusan olvassa a ravasztengelyeket.</string>
+	<string name="controller_mapping_menu_hint">A Menu gomb is hozzarendelheto, es megnyomasakor megnyitja a jatek menujet.</string>
+	<string name="controller_mapping_waiting_for">Bemenetre var: %1$s</string>
+	<string name="controller_mapping_saved">A vezerlokiosztas elmentve ehhez: %1$s</string>
+	<string name="controller_action_menu">Menu</string>
+	<string name="controller_key_mode">Mod</string>
+	<string name="controller_connected_hint">Vezerlo csatlakoztatva: %1$s. A kiosztast a menuben modosithatja.</string>
+	<string name="controller_disconnected">Vezerlo levalasztva: %1$s</string>
+	<string name="ps2_storage_permission_required">A PS2-jatekok betoltesehez teljes fajlhozzaferes szukseges.</string>
+	<string name="ps2_cheats">Csalasok</string>
+	<string name="ps2_cheats_manager_title">Csalaskezelo</string>
+	<string name="ps2_new">Uj</string>
+	<string name="ps2_back">Vissza</string>
+	<string name="ps2_restart">Ujrainditas</string>
+	<string name="ps2_exit">Kilepes</string>
+	<string name="ps2_connected_controller">Csatlakoztatott vezerlo: %1$s</string>
+	<string name="ps2_run_speed">Futasi sebesseg</string>
+	<string name="ps2_aspect_ratio_stretch">Nyujtas</string>
+	<string name="ps2_aspect_ratio_auto">Auto 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Automatikus</string>
+	<string name="ps2_renderer_software">Szoftver</string>
+	<string name="ps2_resolution_native">1× Nativ</string>
+	<string name="ps2_mipmap_auto">Automatikus</string>
+	<string name="ps2_mipmap_basic">Alap</string>
+	<string name="ps2_mipmap_full">Teljes</string>
+	<string name="ps2_half_pixel_offset_off">Ki</string>
+	<string name="ps2_half_pixel_offset_normal">Normal</string>
+	<string name="ps2_half_pixel_offset_special">Specialis</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Specialis (agressziv)</string>
+	<string name="ps2_texture_preloading_disabled">Letiltva</string>
+	<string name="ps2_texture_preloading_partial">Reszleges</string>
+	<string name="ps2_texture_preloading_full">Teljes</string>
+	<string name="ps2_limiter_normal">Normal</string>
+	<string name="ps2_limiter_slow_motion">Lassitas</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Korlatlan</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Ki)</string>
+	<string name="ps2_delete">Torles</string>
+	<string name="ps2_cheat_code">Kod</string>
+	<string name="ps2_cheat_name">Nev</string>
+	<string name="ps2_add">Hozzaadas</string>
 </resources>

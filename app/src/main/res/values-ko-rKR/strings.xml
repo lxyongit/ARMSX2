@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">도움말</string>
+	<string name="controller_mapping_hide_tips">도움말 숨기기</string>
+	<string name="controller_mapping_auto_prompt">새 컨트롤러가 감지되었습니다. 추천 레이아웃을 저장하거나 각 동작을 다시 바인딩하세요.</string>
+	<string name="controller_mapping_sticks_triggers">스틱 및 트리거</string>
+	<string name="controller_mapping_axis_summary">왼쪽 스틱은 X/Y를 사용합니다. 오른쪽 스틱은 RX/RY를 우선 사용하며 필요하면 Z/RZ로 대체합니다. L2/R2는 트리거 축을 자동으로 읽습니다.</string>
+	<string name="controller_mapping_menu_hint">메뉴 키도 매핑할 수 있으며 누르면 게임 내 메뉴가 열립니다.</string>
+	<string name="controller_mapping_waiting_for">입력 대기 중: %1$s</string>
+	<string name="controller_mapping_saved">%1$s용 컨트롤러 매핑을 저장했습니다</string>
+	<string name="controller_action_menu">메뉴</string>
+	<string name="controller_key_mode">모드</string>
+	<string name="controller_connected_hint">컨트롤러 연결됨: %1$s. 메뉴에서 매핑을 변경할 수 있습니다.</string>
+	<string name="controller_disconnected">컨트롤러 연결 해제됨: %1$s</string>
+	<string name="ps2_storage_permission_required">PS2 게임을 불러오려면 모든 파일 접근 권한이 필요합니다.</string>
+	<string name="ps2_cheats">치트</string>
+	<string name="ps2_cheats_manager_title">치트 관리자</string>
+	<string name="ps2_new">새로 만들기</string>
+	<string name="ps2_back">뒤로</string>
+	<string name="ps2_restart">다시 시작</string>
+	<string name="ps2_exit">종료</string>
+	<string name="ps2_connected_controller">연결된 컨트롤러: %1$s</string>
+	<string name="ps2_run_speed">실행 속도</string>
+	<string name="ps2_aspect_ratio_stretch">늘이기</string>
+	<string name="ps2_aspect_ratio_auto">자동 4:3/3:2</string>
+	<string name="ps2_renderer_auto">자동</string>
+	<string name="ps2_renderer_software">소프트웨어</string>
+	<string name="ps2_resolution_native">1× 원본</string>
+	<string name="ps2_mipmap_auto">자동</string>
+	<string name="ps2_mipmap_basic">기본</string>
+	<string name="ps2_mipmap_full">전체</string>
+	<string name="ps2_half_pixel_offset_off">끔</string>
+	<string name="ps2_half_pixel_offset_normal">보통</string>
+	<string name="ps2_half_pixel_offset_special">특수</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">특수(공격적)</string>
+	<string name="ps2_texture_preloading_disabled">사용 안 함</string>
+	<string name="ps2_texture_preloading_partial">부분</string>
+	<string name="ps2_texture_preloading_full">전체</string>
+	<string name="ps2_limiter_normal">보통</string>
+	<string name="ps2_limiter_slow_motion">슬로 모션</string>
+	<string name="ps2_limiter_turbo">터보</string>
+	<string name="ps2_limiter_unlimited">무제한</string>
+	<string name="ps2_ee_cycle_skip_off">0 (끔)</string>
+	<string name="ps2_delete">삭제</string>
+	<string name="ps2_cheat_code">코드</string>
+	<string name="ps2_cheat_name">이름</string>
+	<string name="ps2_add">추가</string>
 </resources>

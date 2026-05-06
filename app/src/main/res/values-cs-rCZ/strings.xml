@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Tipy</string>
+	<string name="controller_mapping_hide_tips">Skryt tipy</string>
+	<string name="controller_mapping_auto_prompt">Byl zjisten novy ovladac. Ulozte navrzene rozlozeni nebo znovu priradte kazdou akci.</string>
+	<string name="controller_mapping_sticks_triggers">Packy a spouste</string>
+	<string name="controller_mapping_axis_summary">Leva packa pouziva X/Y. Prava packa uprednostnuje RX/RY a v pripade potreby prepne na Z/RZ. L2/R2 automaticky ctou osy spousti.</string>
+	<string name="controller_mapping_menu_hint">Klavesu Menu lze take namapovat a po stisku otevre herni nabidku.</string>
+	<string name="controller_mapping_waiting_for">Ceka se na vstup: %1$s</string>
+	<string name="controller_mapping_saved">Mapovani ovladace pro %1$s bylo ulozeno</string>
+	<string name="controller_action_menu">Nabidka</string>
+	<string name="controller_key_mode">Rezim</string>
+	<string name="controller_connected_hint">Ovladac pripojen: %1$s. Jeho mapovani muzete zmenit v nabidce.</string>
+	<string name="controller_disconnected">Ovladac odpojen: %1$s</string>
+	<string name="ps2_storage_permission_required">Pro nacitani her PS2 je vyzadovan pristup ke vsem souborum.</string>
+	<string name="ps2_cheats">Cheaty</string>
+	<string name="ps2_cheats_manager_title">Spravce cheatu</string>
+	<string name="ps2_new">Novy</string>
+	<string name="ps2_back">Zpet</string>
+	<string name="ps2_restart">Restartovat</string>
+	<string name="ps2_exit">Ukoncit</string>
+	<string name="ps2_connected_controller">Pripojeny ovladac: %1$s</string>
+	<string name="ps2_run_speed">Rychlost behu</string>
+	<string name="ps2_aspect_ratio_stretch">Roztahnout</string>
+	<string name="ps2_aspect_ratio_auto">Auto 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Auto</string>
+	<string name="ps2_renderer_software">Software</string>
+	<string name="ps2_resolution_native">1× Nativni</string>
+	<string name="ps2_mipmap_auto">Auto</string>
+	<string name="ps2_mipmap_basic">Zakladni</string>
+	<string name="ps2_mipmap_full">Plne</string>
+	<string name="ps2_half_pixel_offset_off">Vypnuto</string>
+	<string name="ps2_half_pixel_offset_normal">Normalni</string>
+	<string name="ps2_half_pixel_offset_special">Specialni</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Specialni (agresivni)</string>
+	<string name="ps2_texture_preloading_disabled">Zakazano</string>
+	<string name="ps2_texture_preloading_partial">Castecne</string>
+	<string name="ps2_texture_preloading_full">Plne</string>
+	<string name="ps2_limiter_normal">Normalni</string>
+	<string name="ps2_limiter_slow_motion">Zpomaleni</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Neomezene</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Vypnuto)</string>
+	<string name="ps2_delete">Smazat</string>
+	<string name="ps2_cheat_code">Kod</string>
+	<string name="ps2_cheat_name">Nazev</string>
+	<string name="ps2_add">Pridat</string>
 </resources>

@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Saveti</string>
+	<string name="controller_mapping_hide_tips">Sakrij savete</string>
+	<string name="controller_mapping_auto_prompt">Otkriven je novi kontroler. Sacuvajte predlozeni raspored ili ponovo povezite svaku radnju.</string>
+	<string name="controller_mapping_sticks_triggers">Palice i okidaci</string>
+	<string name="controller_mapping_axis_summary">Leva palica koristi X/Y. Desna palica preferira RX/RY i po potrebi se vraca na Z/RZ. L2/R2 automatski citaju ose okidaca.</string>
+	<string name="controller_mapping_menu_hint">Taster Menu takodje moze da se mapira i otvorice meni u igri kada se pritisne.</string>
+	<string name="controller_mapping_waiting_for">Ceka se unos: %1$s</string>
+	<string name="controller_mapping_saved">Mapiranje kontrolera je sacuvano za %1$s</string>
+	<string name="controller_action_menu">Meni</string>
+	<string name="controller_key_mode">Rezim</string>
+	<string name="controller_connected_hint">Kontroler povezan: %1$s. Mozete promeniti mapiranje iz menija.</string>
+	<string name="controller_disconnected">Kontroler iskljucen: %1$s</string>
+	<string name="ps2_storage_permission_required">Pristup svim datotekama je neophodan za ucitavanje PS2 igara.</string>
+	<string name="ps2_cheats">Sifre</string>
+	<string name="ps2_cheats_manager_title">Menadzer sifara</string>
+	<string name="ps2_new">Novo</string>
+	<string name="ps2_back">Nazad</string>
+	<string name="ps2_restart">Ponovo pokreni</string>
+	<string name="ps2_exit">Izadji</string>
+	<string name="ps2_connected_controller">Povezani kontroler: %1$s</string>
+	<string name="ps2_run_speed">Brzina rada</string>
+	<string name="ps2_aspect_ratio_stretch">Razvuci</string>
+	<string name="ps2_aspect_ratio_auto">Automatski 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Automatski</string>
+	<string name="ps2_renderer_software">Softverski</string>
+	<string name="ps2_resolution_native">1× Izvorno</string>
+	<string name="ps2_mipmap_auto">Automatski</string>
+	<string name="ps2_mipmap_basic">Osnovno</string>
+	<string name="ps2_mipmap_full">Puno</string>
+	<string name="ps2_half_pixel_offset_off">Iskljuceno</string>
+	<string name="ps2_half_pixel_offset_normal">Normalno</string>
+	<string name="ps2_half_pixel_offset_special">Posebno</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Posebno (agresivno)</string>
+	<string name="ps2_texture_preloading_disabled">Onemoguceno</string>
+	<string name="ps2_texture_preloading_partial">Delimicno</string>
+	<string name="ps2_texture_preloading_full">Puno</string>
+	<string name="ps2_limiter_normal">Normalno</string>
+	<string name="ps2_limiter_slow_motion">Usporeno</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Neograniceno</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Iskljuceno)</string>
+	<string name="ps2_delete">Obrisi</string>
+	<string name="ps2_cheat_code">Kod</string>
+	<string name="ps2_cheat_name">Naziv</string>
+	<string name="ps2_add">Dodaj</string>
 </resources>

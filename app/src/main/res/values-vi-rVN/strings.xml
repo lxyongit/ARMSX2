@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Mẹo</string>
+	<string name="controller_mapping_hide_tips">Ẩn mẹo</string>
+	<string name="controller_mapping_auto_prompt">Đã phát hiện bộ điều khiển mới. Hãy lưu bố cục được đề xuất hoặc gán lại từng hành động.</string>
+	<string name="controller_mapping_sticks_triggers">Cần điều khiển và cò</string>
+	<string name="controller_mapping_axis_summary">Cần trái dùng X/Y. Cần phải ưu tiên RX/RY và chuyển sang Z/RZ khi cần. L2/R2 tự động đọc trục cò.</string>
+	<string name="controller_mapping_menu_hint">Phím Menu cũng có thể được gán và sẽ mở menu trong game khi nhấn.</string>
+	<string name="controller_mapping_waiting_for">Đang chờ đầu vào: %1$s</string>
+	<string name="controller_mapping_saved">Đã lưu ánh xạ bộ điều khiển cho %1$s</string>
+	<string name="controller_action_menu">Menu</string>
+	<string name="controller_key_mode">Chế độ</string>
+	<string name="controller_connected_hint">Đã kết nối bộ điều khiển: %1$s. Bạn có thể đổi ánh xạ từ menu.</string>
+	<string name="controller_disconnected">Đã ngắt kết nối bộ điều khiển: %1$s</string>
+	<string name="ps2_storage_permission_required">Cần quyền truy cập tất cả tệp để tải game PS2.</string>
+	<string name="ps2_cheats">Mã gian lận</string>
+	<string name="ps2_cheats_manager_title">Trình quản lý gian lận</string>
+	<string name="ps2_new">Mới</string>
+	<string name="ps2_back">Quay lại</string>
+	<string name="ps2_restart">Khởi động lại</string>
+	<string name="ps2_exit">Thoát</string>
+	<string name="ps2_connected_controller">Bộ điều khiển đã kết nối: %1$s</string>
+	<string name="ps2_run_speed">Tốc độ chạy</string>
+	<string name="ps2_aspect_ratio_stretch">Kéo giãn</string>
+	<string name="ps2_aspect_ratio_auto">Tự động 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Tự động</string>
+	<string name="ps2_renderer_software">Phần mềm</string>
+	<string name="ps2_resolution_native">1× Gốc</string>
+	<string name="ps2_mipmap_auto">Tự động</string>
+	<string name="ps2_mipmap_basic">Cơ bản</string>
+	<string name="ps2_mipmap_full">Đầy đủ</string>
+	<string name="ps2_half_pixel_offset_off">Tắt</string>
+	<string name="ps2_half_pixel_offset_normal">Bình thường</string>
+	<string name="ps2_half_pixel_offset_special">Đặc biệt</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Đặc biệt (mạnh)</string>
+	<string name="ps2_texture_preloading_disabled">Đã tắt</string>
+	<string name="ps2_texture_preloading_partial">Một phần</string>
+	<string name="ps2_texture_preloading_full">Đầy đủ</string>
+	<string name="ps2_limiter_normal">Bình thường</string>
+	<string name="ps2_limiter_slow_motion">Chuyển động chậm</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Không giới hạn</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Tắt)</string>
+	<string name="ps2_delete">Xóa</string>
+	<string name="ps2_cheat_code">Mã</string>
+	<string name="ps2_cheat_name">Tên</string>
+	<string name="ps2_add">Thêm</string>
 </resources>

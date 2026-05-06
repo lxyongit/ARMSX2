@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Dicas</string>
+	<string name="controller_mapping_hide_tips">Ocultar dicas</string>
+	<string name="controller_mapping_auto_prompt">Novo comando detetado. Guarde o esquema sugerido ou volte a atribuir cada ação.</string>
+	<string name="controller_mapping_sticks_triggers">Analógicos e gatilhos</string>
+	<string name="controller_mapping_axis_summary">O analógico esquerdo usa X/Y. O direito prefere RX/RY e recorre a Z/RZ quando necessário. L2/R2 leem automaticamente os eixos dos gatilhos.</string>
+	<string name="controller_mapping_menu_hint">A tecla Menu também pode ser mapeada e abrirá o menu do jogo quando for premida.</string>
+	<string name="controller_mapping_waiting_for">A aguardar entrada: %1$s</string>
+	<string name="controller_mapping_saved">Mapeamento do comando guardado para %1$s</string>
+	<string name="controller_action_menu">Menu</string>
+	<string name="controller_key_mode">Modo</string>
+	<string name="controller_connected_hint">Comando ligado: %1$s. Pode alterar o mapeamento a partir do menu.</string>
+	<string name="controller_disconnected">Comando desligado: %1$s</string>
+	<string name="ps2_storage_permission_required">É necessário acesso a todos os ficheiros para carregar jogos PS2.</string>
+	<string name="ps2_cheats">Batotas</string>
+	<string name="ps2_cheats_manager_title">Gestor de batotas</string>
+	<string name="ps2_new">Novo</string>
+	<string name="ps2_back">Voltar</string>
+	<string name="ps2_restart">Reiniciar</string>
+	<string name="ps2_exit">Sair</string>
+	<string name="ps2_connected_controller">Comando ligado: %1$s</string>
+	<string name="ps2_run_speed">Velocidade de execução</string>
+	<string name="ps2_aspect_ratio_stretch">Esticar</string>
+	<string name="ps2_aspect_ratio_auto">Automático 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Automático</string>
+	<string name="ps2_renderer_software">Software</string>
+	<string name="ps2_resolution_native">1× Nativo</string>
+	<string name="ps2_mipmap_auto">Automático</string>
+	<string name="ps2_mipmap_basic">Básico</string>
+	<string name="ps2_mipmap_full">Completo</string>
+	<string name="ps2_half_pixel_offset_off">Desligado</string>
+	<string name="ps2_half_pixel_offset_normal">Normal</string>
+	<string name="ps2_half_pixel_offset_special">Especial</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Especial (agressivo)</string>
+	<string name="ps2_texture_preloading_disabled">Desativado</string>
+	<string name="ps2_texture_preloading_partial">Parcial</string>
+	<string name="ps2_texture_preloading_full">Completo</string>
+	<string name="ps2_limiter_normal">Normal</string>
+	<string name="ps2_limiter_slow_motion">Câmara lenta</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Ilimitado</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Desligado)</string>
+	<string name="ps2_delete">Eliminar</string>
+	<string name="ps2_cheat_code">Código</string>
+	<string name="ps2_cheat_name">Nome</string>
+	<string name="ps2_add">Adicionar</string>
 </resources>

@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Sfaturi</string>
+	<string name="controller_mapping_hide_tips">Ascunde sfaturile</string>
+	<string name="controller_mapping_auto_prompt">Controler nou detectat. Salvează schema sugerată sau remapează fiecare acțiune.</string>
+	<string name="controller_mapping_sticks_triggers">Stick-uri și triggere</string>
+	<string name="controller_mapping_axis_summary">Stick-ul stâng folosește X/Y. Stick-ul drept preferă RX/RY și revine la Z/RZ când este nevoie. L2/R2 citesc automat axele triggerelor.</string>
+	<string name="controller_mapping_menu_hint">Tasta Menu poate fi și ea mapată și va deschide meniul din joc la apăsare.</string>
+	<string name="controller_mapping_waiting_for">Se așteaptă intrare: %1$s</string>
+	<string name="controller_mapping_saved">Maparea controlerului a fost salvată pentru %1$s</string>
+	<string name="controller_action_menu">Meniu</string>
+	<string name="controller_key_mode">Mod</string>
+	<string name="controller_connected_hint">Controler conectat: %1$s. Poți schimba maparea din meniu.</string>
+	<string name="controller_disconnected">Controler deconectat: %1$s</string>
+	<string name="ps2_storage_permission_required">Este necesar accesul la toate fișierele pentru a încărca jocuri PS2.</string>
+	<string name="ps2_cheats">Trucuri</string>
+	<string name="ps2_cheats_manager_title">Manager trucuri</string>
+	<string name="ps2_new">Nou</string>
+	<string name="ps2_back">Înapoi</string>
+	<string name="ps2_restart">Repornește</string>
+	<string name="ps2_exit">Ieșire</string>
+	<string name="ps2_connected_controller">Controler conectat: %1$s</string>
+	<string name="ps2_run_speed">Viteză de rulare</string>
+	<string name="ps2_aspect_ratio_stretch">Întinde</string>
+	<string name="ps2_aspect_ratio_auto">Auto 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Auto</string>
+	<string name="ps2_renderer_software">Software</string>
+	<string name="ps2_resolution_native">1× Nativ</string>
+	<string name="ps2_mipmap_auto">Auto</string>
+	<string name="ps2_mipmap_basic">De bază</string>
+	<string name="ps2_mipmap_full">Complet</string>
+	<string name="ps2_half_pixel_offset_off">Oprit</string>
+	<string name="ps2_half_pixel_offset_normal">Normal</string>
+	<string name="ps2_half_pixel_offset_special">Special</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Special (agresiv)</string>
+	<string name="ps2_texture_preloading_disabled">Dezactivat</string>
+	<string name="ps2_texture_preloading_partial">Parțial</string>
+	<string name="ps2_texture_preloading_full">Complet</string>
+	<string name="ps2_limiter_normal">Normal</string>
+	<string name="ps2_limiter_slow_motion">Mișcare lentă</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Nelimitat</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Oprit)</string>
+	<string name="ps2_delete">Șterge</string>
+	<string name="ps2_cheat_code">Cod</string>
+	<string name="ps2_cheat_name">Nume</string>
+	<string name="ps2_add">Adaugă</string>
 </resources>

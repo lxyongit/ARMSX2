@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Wenke</string>
+	<string name="controller_mapping_hide_tips">Versteek wenke</string>
+	<string name="controller_mapping_auto_prompt">Nuwe beheerder bespeur. Stoor die voorgestelde uitleg of koppel elke aksie weer.</string>
+	<string name="controller_mapping_sticks_triggers">Stokke en snellers</string>
+	<string name="controller_mapping_axis_summary">Die linker stok gebruik X/Y. Die regter stok verkies RX/RY en val terug na Z/RZ indien nodig. L2/R2 lees snellerasse outomaties.</string>
+	<string name="controller_mapping_menu_hint">Die Menu-sleutel kan ook gekoppel word en sal die in-speletjie-kieslys oopmaak wanneer dit gedruk word.</string>
+	<string name="controller_mapping_waiting_for">Wag vir invoer: %1$s</string>
+	<string name="controller_mapping_saved">Beheerder-uitleg vir %1$s is gestoor</string>
+	<string name="controller_action_menu">Kieslys</string>
+	<string name="controller_key_mode">Modus</string>
+	<string name="controller_connected_hint">Beheerder gekoppel: %1$s. Jy kan die uitleg vanuit die kieslys verander.</string>
+	<string name="controller_disconnected">Beheerder ontkoppel: %1$s</string>
+	<string name="ps2_storage_permission_required">Toegang tot alle leers is nodig om PS2-speletjies te laai.</string>
+	<string name="ps2_cheats">Kodes</string>
+	<string name="ps2_cheats_manager_title">Kodebestuurder</string>
+	<string name="ps2_new">Nuut</string>
+	<string name="ps2_back">Terug</string>
+	<string name="ps2_restart">Herbegin</string>
+	<string name="ps2_exit">Verlaat</string>
+	<string name="ps2_connected_controller">Gekoppelde beheerder: %1$s</string>
+	<string name="ps2_run_speed">Spoed</string>
+	<string name="ps2_aspect_ratio_stretch">Rek</string>
+	<string name="ps2_aspect_ratio_auto">Outo 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Outo</string>
+	<string name="ps2_renderer_software">Sagteware</string>
+	<string name="ps2_resolution_native">1× Inheems</string>
+	<string name="ps2_mipmap_auto">Outo</string>
+	<string name="ps2_mipmap_basic">Basies</string>
+	<string name="ps2_mipmap_full">Volledig</string>
+	<string name="ps2_half_pixel_offset_off">Af</string>
+	<string name="ps2_half_pixel_offset_normal">Normaal</string>
+	<string name="ps2_half_pixel_offset_special">Spesiaal</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Spesiaal (aggressief)</string>
+	<string name="ps2_texture_preloading_disabled">Gedeaktiveer</string>
+	<string name="ps2_texture_preloading_partial">Gedeeltelik</string>
+	<string name="ps2_texture_preloading_full">Volledig</string>
+	<string name="ps2_limiter_normal">Normaal</string>
+	<string name="ps2_limiter_slow_motion">Stadige beweging</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Onbeperk</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Af)</string>
+	<string name="ps2_delete">Skrap</string>
+	<string name="ps2_cheat_code">Kode</string>
+	<string name="ps2_cheat_name">Naam</string>
+	<string name="ps2_add">Voeg by</string>
 </resources>

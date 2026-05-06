@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">ヒント</string>
+	<string name="controller_mapping_hide_tips">ヒントを隠す</string>
+	<string name="controller_mapping_auto_prompt">新しいコントローラーが検出されました。推奨レイアウトを保存するか、各操作を再割り当てしてください。</string>
+	<string name="controller_mapping_sticks_triggers">スティックとトリガー</string>
+	<string name="controller_mapping_axis_summary">左スティックは X/Y を使用します。右スティックは RX/RY を優先し、必要に応じて Z/RZ にフォールバックします。L2/R2 はトリガー軸を自動で読み取ります。</string>
+	<string name="controller_mapping_menu_hint">メニューキーも割り当て可能で、押すとゲーム内メニューを開きます。</string>
+	<string name="controller_mapping_waiting_for">入力待ち: %1$s</string>
+	<string name="controller_mapping_saved">%1$s のコントローラーマッピングを保存しました</string>
+	<string name="controller_action_menu">メニュー</string>
+	<string name="controller_key_mode">モード</string>
+	<string name="controller_connected_hint">コントローラー接続: %1$s。メニューからマッピングを変更できます。</string>
+	<string name="controller_disconnected">コントローラー切断: %1$s</string>
+	<string name="ps2_storage_permission_required">PS2 ゲームを読み込むにはすべてのファイルへのアクセスが必要です。</string>
+	<string name="ps2_cheats">チート</string>
+	<string name="ps2_cheats_manager_title">チート管理</string>
+	<string name="ps2_new">新規</string>
+	<string name="ps2_back">戻る</string>
+	<string name="ps2_restart">再起動</string>
+	<string name="ps2_exit">終了</string>
+	<string name="ps2_connected_controller">接続中のコントローラー: %1$s</string>
+	<string name="ps2_run_speed">実行速度</string>
+	<string name="ps2_aspect_ratio_stretch">引き伸ばし</string>
+	<string name="ps2_aspect_ratio_auto">自動 4:3/3:2</string>
+	<string name="ps2_renderer_auto">自動</string>
+	<string name="ps2_renderer_software">ソフトウェア</string>
+	<string name="ps2_resolution_native">1× ネイティブ</string>
+	<string name="ps2_mipmap_auto">自動</string>
+	<string name="ps2_mipmap_basic">基本</string>
+	<string name="ps2_mipmap_full">完全</string>
+	<string name="ps2_half_pixel_offset_off">オフ</string>
+	<string name="ps2_half_pixel_offset_normal">標準</string>
+	<string name="ps2_half_pixel_offset_special">特殊</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">特殊（強）</string>
+	<string name="ps2_texture_preloading_disabled">無効</string>
+	<string name="ps2_texture_preloading_partial">部分</string>
+	<string name="ps2_texture_preloading_full">完全</string>
+	<string name="ps2_limiter_normal">標準</string>
+	<string name="ps2_limiter_slow_motion">スローモーション</string>
+	<string name="ps2_limiter_turbo">ターボ</string>
+	<string name="ps2_limiter_unlimited">無制限</string>
+	<string name="ps2_ee_cycle_skip_off">0（オフ）</string>
+	<string name="ps2_delete">削除</string>
+	<string name="ps2_cheat_code">コード</string>
+	<string name="ps2_cheat_name">名前</string>
+	<string name="ps2_add">追加</string>
 </resources>

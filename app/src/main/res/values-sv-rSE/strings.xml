@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+	<string name="controller_mapping_show_tips">Tips</string>
+	<string name="controller_mapping_hide_tips">Dölj tips</string>
+	<string name="controller_mapping_auto_prompt">Ny handkontroll upptäckt. Spara den föreslagna layouten eller bind om varje åtgärd.</string>
+	<string name="controller_mapping_sticks_triggers">Styrspakar och avtryckare</string>
+	<string name="controller_mapping_axis_summary">Den vänstra styrspaken använder X/Y. Den högra föredrar RX/RY och faller tillbaka till Z/RZ vid behov. L2/R2 läser avtryckaraxlar automatiskt.</string>
+	<string name="controller_mapping_menu_hint">Menu-tangenten kan också mappas och öppnar spelmenyn när den trycks ned.</string>
+	<string name="controller_mapping_waiting_for">Väntar på inmatning: %1$s</string>
+	<string name="controller_mapping_saved">Handkontrollsmappning sparad för %1$s</string>
+	<string name="controller_action_menu">Meny</string>
+	<string name="controller_key_mode">Läge</string>
+	<string name="controller_connected_hint">Handkontroll ansluten: %1$s. Du kan ändra mappningen från menyn.</string>
+	<string name="controller_disconnected">Handkontroll frånkopplad: %1$s</string>
+	<string name="ps2_storage_permission_required">Åtkomst till alla filer krävs för att läsa in PS2-spel.</string>
+	<string name="ps2_cheats">Fusk</string>
+	<string name="ps2_cheats_manager_title">Fuskhanterare</string>
+	<string name="ps2_new">Ny</string>
+	<string name="ps2_back">Tillbaka</string>
+	<string name="ps2_restart">Starta om</string>
+	<string name="ps2_exit">Avsluta</string>
+	<string name="ps2_connected_controller">Ansluten handkontroll: %1$s</string>
+	<string name="ps2_run_speed">Körhastighet</string>
+	<string name="ps2_aspect_ratio_stretch">Sträck</string>
+	<string name="ps2_aspect_ratio_auto">Auto 4:3/3:2</string>
+	<string name="ps2_renderer_auto">Auto</string>
+	<string name="ps2_renderer_software">Programvara</string>
+	<string name="ps2_resolution_native">1× Ursprunglig</string>
+	<string name="ps2_mipmap_auto">Auto</string>
+	<string name="ps2_mipmap_basic">Grundläggande</string>
+	<string name="ps2_mipmap_full">Full</string>
+	<string name="ps2_half_pixel_offset_off">Av</string>
+	<string name="ps2_half_pixel_offset_normal">Normal</string>
+	<string name="ps2_half_pixel_offset_special">Speciell</string>
+	<string name="ps2_half_pixel_offset_special_aggressive">Speciell (aggressiv)</string>
+	<string name="ps2_texture_preloading_disabled">Inaktiverad</string>
+	<string name="ps2_texture_preloading_partial">Delvis</string>
+	<string name="ps2_texture_preloading_full">Full</string>
+	<string name="ps2_limiter_normal">Normal</string>
+	<string name="ps2_limiter_slow_motion">Slowmotion</string>
+	<string name="ps2_limiter_turbo">Turbo</string>
+	<string name="ps2_limiter_unlimited">Obegränsad</string>
+	<string name="ps2_ee_cycle_skip_off">0 (Av)</string>
+	<string name="ps2_delete">Ta bort</string>
+	<string name="ps2_cheat_code">Kod</string>
+	<string name="ps2_cheat_name">Namn</string>
+	<string name="ps2_add">Lägg till</string>
 </resources>
