@@ -82,9 +82,12 @@
 	<string name="ps2_cheats_manager_title">金手指管理</string>
 	<string name="ps2_new">新建</string>
 	<string name="ps2_back">返回</string>
+	<string name="ps2_adjust_button_positions">调整按钮位置</string>
+	<string name="ps2_adjust_button_positions_hint">拖动屏幕按钮以调整位置。</string>
 	<string name="ps2_restart">重新开始</string>
 	<string name="ps2_exit">退出</string>
 	<string name="ps2_connected_controller">已连接手柄：%1$s</string>
+	<string name="ps2_reset">重置</string>
 	<string name="ps2_run_speed">运行速度</string>
 	<string name="ps2_aspect_ratio_stretch">拉伸</string>
 	<string name="ps2_aspect_ratio_auto">自动 4:3/3:2</string>

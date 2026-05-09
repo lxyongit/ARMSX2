@@ -458,9 +458,12 @@ Open it later from Settings → Open ARMSX2 directory.</string>
     <string name="ps2_cheats_manager_title">Cheat Manager</string>
     <string name="ps2_new">New</string>
     <string name="ps2_back">Back</string>
+    <string name="ps2_adjust_button_positions">Adjust Button Positions</string>
+    <string name="ps2_adjust_button_positions_hint">Drag the on-screen buttons to move them.</string>
     <string name="ps2_restart">Restart</string>
     <string name="ps2_exit">Exit</string>
     <string name="ps2_connected_controller">Connected controller: %1$s</string>
+    <string name="ps2_reset">Reset</string>
     <string name="ps2_run_speed">Run Speed</string>
     <string name="ps2_aspect_ratio_stretch">Stretch</string>
     <string name="ps2_aspect_ratio_auto">Auto 4:3/3:2</string>

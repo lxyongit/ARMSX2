@@ -93,6 +93,7 @@ fun PS2Menu(
     hasConnectedController: Boolean = false,
     connectedControllerName: String = "",
     onOpenControllerMapping: (() -> Unit)? = null,
+    onAdjustButtonPositions: (() -> Unit)? = null,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -325,6 +326,11 @@ fun PS2Menu(
                         }
                         Button(onClick = { showCheatsView = true }) {
                             Text(stringResource(R.string.ps2_cheats))
+                        }
+                        if (onAdjustButtonPositions != null) {
+                            Button(onClick = onAdjustButtonPositions) {
+                                Text(stringResource(R.string.ps2_adjust_button_positions))
+                            }
                         }
                         if (hasConnectedController && onOpenControllerMapping != null) {
                             Button(onClick = onOpenControllerMapping) {
